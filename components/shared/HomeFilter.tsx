@@ -26,7 +26,7 @@ const FILTER = [
 
 const HomeFilter = () => {
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 mb-8">
       {FILTER.map((item, index) => (
         <RenderTag key={index} {...item} />
       ))}

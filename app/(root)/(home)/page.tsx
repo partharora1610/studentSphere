@@ -1,5 +1,5 @@
+import QuestionsContainer from "@/components/shared/Home/QuestionsContainer";
 import HomeFilter from "@/components/shared/HomeFilter";
-import QuestionCard from "@/components/shared/QuestionCard";
 import LocalSearch from "@/components/shared/Search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import React from "react";
@@ -14,7 +14,7 @@ export default function Home() {
       <LocalSearch />
       <HomeFilter />
 
-      <QuestionCard />
+      <QuestionsContainer />
     </main>
   );
 }
