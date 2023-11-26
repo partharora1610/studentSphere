@@ -22,9 +22,11 @@ import { QuestionFormSchema } from "@/lib/validations";
 import { createQuestion } from "@/lib/actions/question.action";
 import { useRouter } from "next/navigation";
 
-export function QuestionForm() {
+export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const router = useRouter();
+
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
     resolver: zodResolver(QuestionFormSchema),
     defaultValues: {
@@ -33,6 +35,8 @@ export function QuestionForm() {
       tags: [],
     },
   });
+
+  console.log({ mongoUserId });
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -67,8 +71,6 @@ export function QuestionForm() {
     console.log(values);
     setIsSubmitting(true);
 
-    // here value is the formData
-
     try {
       await createQuestion({
         title: values.title,
@@ -78,11 +80,13 @@ export function QuestionForm() {
         // path: pathname,
       });
 
-      // navigate to home page
       router.push("/");
     } catch (error) {
+      // ERROR BLOCK
+      console.log(error);
     } finally {
       // set the submitting to false after the request is completed
+      // will later use this state to update the page and redirect the user onto another page
       setIsSubmitting(false);
     }
   }
