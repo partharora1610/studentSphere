@@ -20,13 +20,15 @@ import { Textarea } from "../ui/textarea";
 
 import { QuestionFormSchema } from "@/lib/validations";
 import { createQuestion } from "@/lib/actions/question.action";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
+  const pathname = usePathname();
 
+  // declaring the default values
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
     resolver: zodResolver(QuestionFormSchema),
     defaultValues: {
@@ -35,8 +37,6 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
       tags: [],
     },
   });
-
-  console.log({ mongoUserId });
 
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
@@ -67,29 +67,28 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
     }
   };
 
-  async function onSubmit(values: z.infer<typeof QuestionFormSchema>) {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true);
+
+    console.log(values);
+    console.log(values.title);
 
     try {
       await createQuestion({
         title: values.title,
-        content: values.description,
+        description: values.description,
         tags: values.tags,
-        // author: JSON.parse(mongoUserId),
-        // path: pathname,
+        author: mongoUserId,
+        path: pathname,
       });
 
       router.push("/");
     } catch (error) {
-      // ERROR BLOCK
       console.log(error);
     } finally {
-      // set the submitting to false after the request is completed
-      // will later use this state to update the page and redirect the user onto another page
       setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <Form {...form}>
@@ -105,8 +104,8 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
               <FormControl>
                 <Input
                   placeholder="Enter your title here"
-                  {...field}
                   className="background-light800_darkgradient border-none p-4 py-6"
+                  {...field}
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">

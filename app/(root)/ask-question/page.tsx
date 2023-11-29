@@ -15,12 +15,12 @@ const Page = async () => {
 
   const mongoUser = await getUserById({ userId });
 
-  console.log(mongoUser);
+  // console.log(mongoUser);
 
   return (
     <div className="dark:text-white">
       <h2 className="h2-bold mb-10">Ask a question</h2>
-      <QuestionForm mongoUserId={mongoUser._id} />
+      <QuestionForm mongoUserId={mongoUser?._id} />
     </div>
   );
 };

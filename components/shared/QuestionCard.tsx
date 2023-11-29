@@ -11,53 +11,64 @@ import RenderTag from "./RenderTag";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { IQuestion } from "@/database/question.model";
 
-const question = {
-  title:
-    "Best practices for data fetching in a Next.js application with Server-Side Rendering (SSR)?",
-  tags: [
-    {
-      title: "IIT DELHI",
-      url: "/",
-      articles: 10,
-    },
-    {
-      title: "Scaler School of Technology",
-      url: "/",
-      articles: 22,
-    },
-    {
-      title: "Mental Health",
-      url: "/",
-      articles: 221,
-    },
-  ],
-  author: "John Doe",
-  authorImage: "",
-  createdAt: "2021-10-10",
-  updatedAt: "2021-10-10",
-  answers: 90,
-  upvotes: 100,
-  downvotes: 10,
-};
+interface QuestionProps {
+  _id: string;
+  title: string;
+  tags: {
+    _id: string;
+    name: string;
+  }[];
+  author: {
+    _id: string;
+    name: string;
+    picture: string;
+    clerkId: string;
+  };
+  upvotes: string[];
+  views: number;
+  answers: Array<object>;
+  createdAt: Date;
+  clerkId?: string | null;
+}
 
-const QuestionCard = () => {
+const QuestionCard = ({
+  clerkId,
+  _id,
+  title,
+  tags,
+  author,
+  upvotes,
+  views,
+  answers,
+  createdAt,
+}: QuestionProps) => {
   return (
-    <Link href="/question/hbvhgfytr76y82">
+    <Link href={`/question/${_id}`}>
       <Card className="background-light900_dark200 border-none text-dark100_light900">
         <CardHeader>
-          <h3 className="h3-semibold">{question.title}</h3>
+          <h3 className="h3-semibold">{title}</h3>
 
-          <CardDescription className="">Render Tags Here</CardDescription>
+          <CardDescription className="">
+            Render the tags here..
+            {/* {
+              // <RenderTag tags={question.tags} />
+              question.tags.map((tag) => (
+                <RenderTag key={tag._id} tag={tag} />
+              ))
+            } */}
+          </CardDescription>
         </CardHeader>
 
         <CardFooter className="flex items-center justify-between">
           <div className="flex gap-2">
             <Image src="" alt="user" />
-            <p>{question.author}</p>
+            {/* Need to create a type that extends this so that we can use that above in the Question card params */}
+            <p>{author.name}</p>
           </div>
           <div className="flex gap-1 small-regular">
-            <Button>Votes</Button>
+            <Button>{views}</Button>
             <Button>upvotes</Button>
             <Button>downvotes</Button>
           </div>
