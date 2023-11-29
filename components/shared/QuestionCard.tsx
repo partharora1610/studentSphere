@@ -7,11 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import RenderTag from "./RenderTag";
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { IQuestion } from "@/database/question.model";
 
 interface QuestionProps {
   _id: string;

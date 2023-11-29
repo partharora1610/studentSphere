@@ -54,7 +54,7 @@ const RightSidebar = () => {
         <h3 className="h3-semibold pb-6 dark:text-primary-100">Popular Tags</h3>
         <div className="flex flex-col gap-8">
           {Tags.map((tag) => {
-            return <RenderTag {...tag} />;
+            return <RenderTag key={tag.title} {...tag} />;
           })}
         </div>
       </div>
