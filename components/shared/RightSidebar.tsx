@@ -36,6 +36,7 @@ const RightSidebar = () => {
           {Questions.map(() => {
             return (
               <Link
+                key={Math.random()}
                 href="/question"
                 className="flex justify-between items-start gap-7"
               >
