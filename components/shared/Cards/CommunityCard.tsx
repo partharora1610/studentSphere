@@ -15,7 +15,7 @@ const CommunityCard = (params: any) => {
 
   return (
     <>
-      <Link href={`/profile/${_id}`}>
+      <Link href={`/profile/${_id}`} className="w-[250px]">
         <Card className="border-none background-light900_dark200">
           <CardHeader>
             <Image
@@ -23,17 +23,19 @@ const CommunityCard = (params: any) => {
               alt="user image"
               width={100}
               height={100}
-              className="rounded-full"
+              className="rounded-full m-auto"
             />
             <CardTitle>
-              <h3 className="base-semibold">{name}</h3>
+              <h3 className="base-semibold text-center">{name}</h3>
             </CardTitle>
             <CardDescription>
-              <p className="small-regular">{username}</p>
+              <p className="small-regular text-center">{username}</p>
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p>Render Tags here</p>
+            <div className="flex m-auto gap-1">
+              <p>Render Tags here</p>
+            </div>
           </CardContent>
         </Card>
       </Link>

@@ -3,7 +3,7 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
 
-// get a user by the clerk ID
+// get a user by the clerkId
 export async function getUserById(params: { userId: string }) {
   try {
     connectToDatabase();
@@ -21,10 +21,7 @@ export async function getUserById(params: { userId: string }) {
 export const getAllUsers = async (params: any) => {
   try {
     connectToDatabase();
-    console.log("GET ALL USER ACTION");
     const users = await User.find({});
-    // console.log("users");
-    // console.log("users", users);
 
     return { users };
   } catch (error) {

@@ -70,8 +70,8 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
   const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true);
 
-    console.log(values);
-    console.log(values.title);
+    // console.log(values);
+    // console.log(values.title);
 
     try {
       await createQuestion({

@@ -78,3 +78,5 @@ export const getAllQuestion = async (params: any) => {
     console.log(error);
   }
 };
+
+// we need to get all the questions that have a certain tag in them

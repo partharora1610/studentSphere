@@ -2,7 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const ProfileHeader = () => {
+const ProfileHeader = ({
+  name,
+  username,
+
+  joinedAt,
+}: any) => {
   return (
     <>
       <div className="flex justify-between text-dark100_light900 mb-16">
@@ -15,11 +20,11 @@ const ProfileHeader = () => {
             className="rounded-full"
           />
           <div className="flex flex-col">
-            <h2 className="h3-semibold">NAME OF THE USER</h2>
+            <h2 className="h3-semibold">{name}</h2>
 
-            <p className="small-regular">USERNAME</p>
+            <p className="small-regular">{username}</p>
 
-            <p>[calenderImage] JOINED AT TIMESTAMP</p>
+            <p>{joinedAt} JOINED AT TIMESTAMP</p>
           </div>
         </div>
 
