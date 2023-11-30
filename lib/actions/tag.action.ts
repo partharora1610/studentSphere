@@ -1,10 +1,11 @@
 "use server";
 
-import mongoose from "mongoose";
-import Tag from "@/database/tag.models";
+import mongoose, { FilterQuery } from "mongoose";
 
 import { connectToDatabase } from "../mongoose";
+import Tag, { ITag } from "@/database/tag.models";
 import Question from "@/database/question.model";
+import User from "@/database/user.model";
 
 export const getAllTags = async (params: any) => {
   try {
@@ -21,7 +22,6 @@ export const getAllTags = async (params: any) => {
 export const getTag = async (name: string) => {
   try {
     connectToDatabase();
-    // Getting the tag from the database...
     const tag = await mongoose.models.Tag.findOne({
       name: {
         $regex: new RegExp(`^${name}$`, "i"),
@@ -30,9 +30,46 @@ export const getTag = async (name: string) => {
       path: "question",
       model: Question,
     });
-    // here we might need to populate the question from the all the tags that are associated with  it and at the same time we need to populate the author as well...
 
     return tag;
+  } catch (error) {
+    console.log("ERROR IN GET TAG ACTION");
+    console.log(error);
+  }
+};
+
+export const getQuestionsByTagId = async (params: any) => {
+  try {
+    connectToDatabase();
+
+    const { tagId, page = 1, pageSize = 10, searchQuery } = params;
+
+    const tagFilter: FilterQuery<ITag> = { _id: tagId };
+
+    const tag = await Tag.findOne(tagFilter).populate({
+      path: "questions",
+      model: Question,
+      populate: [
+        {
+          path: "author",
+          model: User,
+          select: "_id clerkId name username",
+        },
+        {
+          path: "tags",
+          model: Tag,
+          select: "_id name",
+        },
+      ],
+    });
+
+    if (!tag) {
+      throw new Error("Tag not found");
+    }
+
+    const questions = tag.questions;
+
+    return { tagTitle: tag.name, questions };
   } catch (error) {
     console.log("ERROR IN GET TAG ACTION");
     console.log(error);

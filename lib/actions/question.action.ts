@@ -23,23 +23,9 @@ export const createQuestion = async (params: createQuestionParams) => {
 
     for (const tag of tags) {
       const existingTag = await Tag.findOneAndUpdate(
-        {
-          name: {
-            $regex: new RegExp(`^${tag}$`, "i"),
-          },
-        },
-        {
-          $setOnInsert: {
-            name: tag,
-          },
-          $push: {
-            question: newQuestion._id,
-          },
-        },
-        {
-          upsert: true,
-          new: true,
-        }
+        { name: { $regex: new RegExp(`^${tag}$`, "i") } },
+        { $setOnInsert: { name: tag }, $push: { questions: newQuestion._id } },
+        { upsert: true, new: true }
       );
       tagDocuments.push(existingTag._id);
     }
@@ -48,10 +34,6 @@ export const createQuestion = async (params: createQuestionParams) => {
       $push: { tags: { $each: tagDocuments } },
     });
 
-    // need to update other properties like reputation and all...
-
-    // this helps to load the updated data if any...
-    // since here we know that the data has been added so this act as a reload for us...
     revalidatePath(path);
   } catch (error) {
     console.log("ERROR IN CREATE QUESTION ACTION");
@@ -79,4 +61,27 @@ export const getAllQuestion = async (params: any) => {
   }
 };
 
-// we need to get all the questions that have a certain tag in them
+export const getQuestionById = async (params: any) => {
+  try {
+    connectToDatabase();
+
+    const { id } = params;
+
+    // I also need to populate the votes and downvotes array so that I am able to display that result also
+
+    const question = await Question.findById(id)
+      .populate({
+        path: "tags",
+        model: Tag,
+      })
+      .populate({
+        path: "author",
+        model: User,
+      });
+
+    return { data: question };
+  } catch (error) {
+    console.log("ERROR IN GET QUESTION BY ID ACTION");
+    console.log(error);
+  }
+};
