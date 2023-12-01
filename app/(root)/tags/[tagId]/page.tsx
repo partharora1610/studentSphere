@@ -29,7 +29,6 @@ const Page = async ({ params }: any) => {
           return (
             <QuestionCard
               key={question._id}
-              clerkId={question.clerkId}
               _id={question._id}
               title={question.title}
               tags={question.tags}
