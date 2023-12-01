@@ -7,6 +7,7 @@ import LocalSearch from "@/components/shared/Search/LocalSearch";
 import { getAllUsers } from "@/lib/actions/user.action";
 
 const page = async () => {
+  // returns the all users
   const results = await getAllUsers({});
 
   return (

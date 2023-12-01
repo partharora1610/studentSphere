@@ -35,6 +35,7 @@ export const createQuestion = async (params: createQuestionParams) => {
     });
 
     revalidatePath(path);
+    return { data: newQuestion };
   } catch (error) {
     console.log("ERROR IN CREATE QUESTION ACTION");
     console.log(error);
@@ -67,8 +68,6 @@ export const getQuestionById = async (params: any) => {
 
     const { id } = params;
 
-    // I also need to populate the votes and downvotes array so that I am able to display that result also
-
     const question = await Question.findById(id)
       .populate({
         path: "tags",
@@ -80,6 +79,29 @@ export const getQuestionById = async (params: any) => {
       });
 
     return { data: question };
+  } catch (error) {
+    console.log("ERROR IN GET QUESTION BY ID ACTION");
+    console.log(error);
+  }
+};
+
+export const getQuestionOfUser = async (params: any) => {
+  try {
+    connectToDatabase();
+
+    const { _id } = params;
+
+    const questions = await Question.findOne({ author: _id })
+      .populate({
+        path: "tags",
+        model: Tag,
+      })
+      .populate({
+        path: "author",
+        model: User,
+      });
+
+    return { data: questions };
   } catch (error) {
     console.log("ERROR IN GET QUESTION BY ID ACTION");
     console.log(error);

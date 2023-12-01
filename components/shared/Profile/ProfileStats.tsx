@@ -3,7 +3,7 @@ import React from "react";
 const ProfileStats = () => {
   return (
     <div className="mb-8">
-      <h2 className="h2-bold text-dark100_light900 mb-4">Stats</h2>
+      <h2 className="h2-bold text-dark100_light900 mb-6">Stats</h2>
 
       <div className="background-light900_dark200 w-full flex justify-between p-4 text-dark100_light900">
         <StatsCard title="Gold" value="100" />

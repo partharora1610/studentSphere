@@ -1,13 +1,19 @@
 import ProfileContent from "@/components/shared/Profile/ProfileContent";
 import ProfileHeader from "@/components/shared/Profile/ProfileHeader";
 import ProfileStats from "@/components/shared/Profile/ProfileStats";
+import {
+  getQuestionById,
+  getQuestionOfUser,
+} from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
 import { get } from "http";
+import test from "node:test";
 import React from "react";
 
 const page = async () => {
   // const { userId } = auth();
+  // This is the test clerkId
   const userId = "12345678";
 
   if (!userId) {
@@ -17,6 +23,7 @@ const page = async () => {
   const profile = await getUserById({ userId });
 
   const {
+    _id,
     name,
     username,
     email,
@@ -28,6 +35,14 @@ const page = async () => {
     saved,
     joinedAt,
   } = profile;
+
+  const questions = await getQuestionOfUser({ _id });
+
+  console.log(questions);
+
+  if (!questions) {
+    return <p>Not authorized</p>;
+  }
 
   return (
     <div>
@@ -44,6 +59,7 @@ const page = async () => {
         // // saved={saved}
       />
       <ProfileStats />
+      {/* This is giving error here */}
       <ProfileContent />
     </div>
   );
