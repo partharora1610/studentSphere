@@ -7,7 +7,7 @@ import React from "react";
 const page = async () => {
   const tags = await getAllTags({});
 
-  console.log(tags);
+  // console.log(tags);
 
   if (!tags || tags.length == 0) {
     return <p>No tags found</p>;

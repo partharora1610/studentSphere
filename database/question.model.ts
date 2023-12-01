@@ -12,7 +12,7 @@ export interface IQuestion extends mongoose.Document {
   author: Schema.Types.ObjectId;
   answers: Schema.Types.ObjectId[];
 
-  craetedAt: Date;
+  createdAt: Date;
   updatedAt: Date;
 }
 

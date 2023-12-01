@@ -10,7 +10,7 @@ const Page = async ({ params }: any) => {
     page: 1,
   });
 
-  console.log(results);
+  // console.log(results);
 
   if (!results?.questions) return null;
 

@@ -38,7 +38,7 @@ const page = async () => {
 
   const questions = await getQuestionOfUser({ _id });
 
-  console.log(questions);
+  // console.log(questions);
 
   if (!questions) {
     return <p>Not authorized</p>;
