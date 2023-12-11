@@ -3,6 +3,7 @@
 import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
 import Question from "@/database/question.model";
+import Tag from "@/database/tag.models";
 
 export async function getUserById(params: { userId: string }) {
   try {

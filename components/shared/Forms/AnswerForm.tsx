@@ -37,9 +37,8 @@ const AnswerForm = (params: any) => {
       content: values.content,
       author: JSON.parse(author),
     });
-
-    // console.log(answer);
   };
+
   return (
     <>
       <div className="flex justify-between items-center mb-4 text-dark100_light900 ">
@@ -60,7 +59,7 @@ const AnswerForm = (params: any) => {
                   <FormControl>
                     <Textarea
                       placeholder="Enter description here"
-                      className="background-light800_darkgradient resize-y h-40 w-full custom-scrollbar rounded-md  border-none p-4 py-6"
+                      className="background-light800_darkgradient resize-y h-40 w-full custom-scrollbar rounded-md  border-none p-4 py-6 text-dark100_light900 "
                       {...field}
                     />
                   </FormControl>

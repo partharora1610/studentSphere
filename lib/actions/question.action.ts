@@ -6,6 +6,7 @@ import { connectToDatabase } from "../mongoose";
 import { createQuestionParams } from "../../lib/actions/shared.types";
 import Question from "@/database/question.model";
 import { revalidatePath } from "next/cache";
+import Answer from "@/database/answer.model";
 
 export const createQuestion = async (params: createQuestionParams) => {
   try {
@@ -45,6 +46,7 @@ export const createQuestion = async (params: createQuestionParams) => {
 export const getAllQuestion = async (params: any) => {
   try {
     connectToDatabase();
+
     const questions = await Question.find({})
       .populate({
         path: "tags",
@@ -54,6 +56,8 @@ export const getAllQuestion = async (params: any) => {
         path: "author",
         model: User,
       });
+
+    console.log(questions);
 
     return { questions };
   } catch (error) {
@@ -76,6 +80,14 @@ export const getQuestionById = async (params: any) => {
       .populate({
         path: "author",
         model: User,
+      })
+      .populate({
+        path: "answers",
+        model: Answer,
+        populate: {
+          path: "author",
+          model: User,
+        },
       });
 
     return { data: question };
@@ -91,15 +103,10 @@ export const getQuestionOfUser = async (params: any) => {
 
     const { _id } = params;
 
-    const questions = await Question.findOne({ author: _id })
-      .populate({
-        path: "tags",
-        model: Tag,
-      })
-      .populate({
-        path: "author",
-        model: User,
-      });
+    const questions = await Question.findOne({ author: _id }).populate({
+      path: "tags",
+      model: Tag,
+    });
 
     return { data: questions };
   } catch (error) {

@@ -1,7 +1,7 @@
-"use client";
+// "use client";
 
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+// import React, { useEffect, useState } from "react";
 import QuestionCard from "../QuestionCard";
 
 const CONSTANTS = [
@@ -18,10 +18,10 @@ const CONSTANTS = [
 ];
 
 const ProfileContent = (params: any) => {
-  const [active, setActive] = useState("top-posts");
-  const [questions, setQuestions] = useState([]);
+  // const [active, setActive] = useState("top-posts");
+  // const [questions, setQuestions] = useState([]);
 
-  // const { questions } = params;
+  const { questions } = params;
 
   // if (!questions.data) return <div>loading...</div>;
 
@@ -30,23 +30,23 @@ const ProfileContent = (params: any) => {
       <div className="text-white col-span-2">
         <div className="background-light900_dark200 flex p-2 rounded-lg w-[220px] justify-between mb-10">
           <Button
-            onClick={() => setActive("top-posts")}
-            className={` ${
-              active == "top-posts"
-                ? "text-primary-500 background-light800_dark400"
-                : " "
-            } `}
+          // onClick={() => setActive("top-posts")}
+          // className={` ${
+          //   active == "top-posts"
+          //     ? "text-primary-500 background-light800_dark400"
+          //     : " "
+          // } `}
           >
             Top Posts
           </Button>
 
           <Button
-            onClick={() => setActive("answers")}
-            className={` ${
-              active == "answers"
-                ? "text-primary-500 background-light800_dark400"
-                : " "
-            } `}
+          // onClick={() => setActive("answers")}
+          // className={` ${
+          //   active == "answers"
+          //     ? "text-primary-500 background-light800_dark400"
+          //     : " "
+          // } `}
           >
             Answers
           </Button>

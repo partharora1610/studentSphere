@@ -6,14 +6,10 @@ import {
   getQuestionOfUser,
 } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
-import { auth } from "@clerk/nextjs";
-import { get } from "http";
-import test from "node:test";
+
 import React from "react";
 
 const page = async () => {
-  // const { userId } = auth();
-  // This is the test clerkId
   const userId = "12345678";
 
   if (!userId) {
@@ -38,7 +34,7 @@ const page = async () => {
 
   const questions = await getQuestionOfUser({ _id });
 
-  // console.log(questions);
+  console.log(questions);
 
   if (!questions) {
     return <p>Not authorized</p>;
@@ -60,7 +56,7 @@ const page = async () => {
       />
       <ProfileStats />
       {/* This is giving error here */}
-      <ProfileContent />
+      <ProfileContent questions={questions} />
     </div>
   );
 };

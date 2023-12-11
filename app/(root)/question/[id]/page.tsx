@@ -22,8 +22,6 @@ const Page = async ({ params }: any) => {
   }
 
   const { id } = params;
-  // console.log({ id });
-  // console.log(JSON.stringify(mongoUser._id));
 
   const results = await getQuestionById({ id });
 

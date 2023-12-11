@@ -26,8 +26,7 @@ const spaceGrotesk = Space_Grotesk({
 // metadata
 export const metadata: Metadata = {
   title: "StudentSphere",
-  description:
-    "A community driven platform for students by students where they can help each other out with their problems and share their knowledge.",
+  description: "",
 };
 
 export default function RootLayout({
