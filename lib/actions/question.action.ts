@@ -7,6 +7,7 @@ import { createQuestionParams } from "../../lib/actions/shared.types";
 import Question from "@/database/question.model";
 import { revalidatePath } from "next/cache";
 import Answer from "@/database/answer.model";
+import { FilterQuery } from "mongoose";
 
 export const createQuestion = async (params: createQuestionParams) => {
   try {
@@ -47,7 +48,19 @@ export const getAllQuestion = async (params: any) => {
   try {
     connectToDatabase();
 
-    const questions = await Question.find({})
+    const { searchQuery } = params;
+    console.log("searchQuery", searchQuery);
+
+    const query: FilterQuery<typeof Question> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, "i") } },
+        { description: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+
+    const questions = await Question.find(query)
       .populate({
         path: "tags",
         model: Tag,

@@ -6,9 +6,10 @@ import LocalSearch from "@/components/shared/Search/LocalSearch";
 
 import { getAllUsers } from "@/lib/actions/user.action";
 
-const page = async () => {
-  // returns the all users
-  const results = await getAllUsers({});
+const page = async ({ searchParams }: any) => {
+  const results = await getAllUsers({
+    searchQuery: searchParams.search,
+  });
 
   return (
     <div className="dark:text-white">

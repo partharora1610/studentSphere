@@ -2,9 +2,14 @@ import QuestionsContainer from "@/components/shared/Home/QuestionsContainer";
 import HomeFilter from "@/components/shared/HomeFilter";
 import LocalSearch from "@/components/shared/Search/LocalSearch";
 import { Button } from "@/components/ui/button";
+import { getAllQuestion } from "@/lib/actions/question.action";
 import React from "react";
 
-export default function Home() {
+const Home = async ({ searchParams }: any) => {
+  const result = await getAllQuestion({
+    searchQuery: searchParams.search,
+  });
+
   return (
     <main className="">
       <div className="flex justify-between items-center mb-8">
@@ -14,7 +19,9 @@ export default function Home() {
       <LocalSearch />
       <HomeFilter />
 
-      <QuestionsContainer />
+      <QuestionsContainer questions={result?.questions} />
     </main>
   );
-}
+};
+
+export default Home;

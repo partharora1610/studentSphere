@@ -1,13 +1,42 @@
 "use client";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import { formNewUrl, removeKeysFromQuery } from "@/lib/utils";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 interface LocalSearchProps {
   placeholder?: string;
 }
 
 const LocalSearch = ({ placeholder }: LocalSearchProps) => {
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const query = searchParams.get("search");
+
+  const [search, setSearch] = useState(query || "");
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (search) {
+        const newURL = formNewUrl({
+          params: searchParams.toString(),
+          key: "search",
+          value: search,
+        });
+        router.push(newURL, { scroll: false });
+      } else {
+        const newURL = removeKeysFromQuery({
+          params: searchParams.toString(),
+          keys: ["search"],
+        });
+        router.push(newURL, { scroll: false });
+      }
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search]);
 
   return (
     <div className="relative w-full mb-6 max-lg:hidden">
