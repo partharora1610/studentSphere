@@ -6,6 +6,7 @@ export interface IQuestion extends mongoose.Document {
   tags: Schema.Types.ObjectId[];
 
   views: number;
+
   upvotes: Schema.Types.ObjectId[];
   downvotes: Schema.Types.ObjectId[];
 

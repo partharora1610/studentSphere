@@ -25,6 +25,7 @@ const LocalSearch = ({ placeholder }: LocalSearchProps) => {
           key: "search",
           value: search,
         });
+
         router.push(newURL, { scroll: false });
       } else {
         const newURL = removeKeysFromQuery({

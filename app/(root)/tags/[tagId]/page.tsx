@@ -4,13 +4,11 @@ import TagSort from "@/components/shared/Tags/TagSort";
 import { getQuestionsByTagId } from "@/lib/actions/tag.action";
 import React from "react";
 
-const Page = async ({ params }: any) => {
+const Page = async ({ searchParams, params }: any) => {
   const results = await getQuestionsByTagId({
     tagId: params.tagId,
     page: 1,
   });
-
-  // console.log(results);
 
   if (!results?.questions) return null;
 
@@ -19,8 +17,7 @@ const Page = async ({ params }: any) => {
       <h2 className="h2-bold mb-10">All Users</h2>
       <div className="flex items-center gap-4">
         <LocalSearch placeholder="Search tags questions..." />
-        {/* Need to change the sort and  */}
-        {/* Make sort more generic here */}
+
         <TagSort />
       </div>
 

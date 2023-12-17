@@ -1,9 +1,11 @@
 "use server";
 
+import { FilterQuery } from "mongoose";
+
 import User from "@/database/user.model";
-import { connectToDatabase } from "../mongoose";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.models";
+import { connectToDatabase } from "../mongoose";
 
 export async function getUserById(params: { userId: string }) {
   try {
@@ -22,7 +24,18 @@ export async function getUserById(params: { userId: string }) {
 export const getAllUsers = async (params: any) => {
   try {
     connectToDatabase();
-    const users = await User.find({});
+    const { searchQuery } = params;
+
+    const query: FilterQuery<typeof User> = {};
+
+    if (searchQuery) {
+      query.$or = [
+        { name: { $regex: new RegExp(searchQuery, "i") } },
+        { username: { $regex: new RegExp(searchQuery, "i") } },
+      ];
+    }
+
+    const users = await User.find(query);
 
     return { users };
   } catch (error) {

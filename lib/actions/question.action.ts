@@ -47,9 +47,10 @@ export const createQuestion = async (params: createQuestionParams) => {
 export const getAllQuestion = async (params: any) => {
   try {
     connectToDatabase();
+    console.log("executing getAllQuestion action");
 
     const { searchQuery } = params;
-    console.log("searchQuery", searchQuery);
+    // console.log("searchQuery", searchQuery);
 
     const query: FilterQuery<typeof Question> = {};
 
@@ -70,7 +71,7 @@ export const getAllQuestion = async (params: any) => {
         model: User,
       });
 
-    console.log(questions);
+    // console.log("questions", questions);
 
     return { questions };
   } catch (error) {
@@ -124,6 +125,65 @@ export const getQuestionOfUser = async (params: any) => {
     return { data: questions };
   } catch (error) {
     console.log("ERROR IN GET QUESTION BY ID ACTION");
+    console.log(error);
+  }
+};
+
+export const upvoteQuestion = async (params: any) => {
+  try {
+    connectToDatabase();
+
+    const { questionId, userId } = params;
+
+    const mongo_user = await User.findById({ clerkId: userId });
+    const mongo_question = await Question.findById(questionId);
+
+    // Implement edge cases better
+    if (!mongo_user || !mongo_question) {
+      return { data: null };
+    }
+
+    const question = await Question.findByIdAndUpdate(
+      questionId,
+      {
+        $addToSet: { upvotes: userId },
+        $pull: { downvotes: userId },
+      },
+      { new: true }
+    );
+
+    return { data: question };
+  } catch (error) {
+    console.log("ERROR IN UPVOTE QUESTION ACTION");
+    console.log(error);
+  }
+};
+
+export const downvoteQuestion = async (params: any) => {
+  try {
+    connectToDatabase();
+
+    const { questionId, userId } = params;
+
+    const mongo_user = await User.findById({ clerkId: userId });
+    const mongo_question = await Question.findById(questionId);
+
+    if (!mongo_user || !mongo_question) {
+      return { data: null };
+    }
+
+    const question = await Question.findByIdAndUpdate(
+      questionId,
+      {
+        $addToSet: { downvotes: userId },
+        $pull: { upvotes: userId },
+      },
+      { new: true }
+    );
+
+    return { data: question };
+  } catch (error) {
+    console.log("ERROR IN DOWNVOTE QUESTION ACTION");
     console.log(error);
   }
 };

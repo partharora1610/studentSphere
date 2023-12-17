@@ -8,12 +8,12 @@ export function cn(...inputs: ClassValue[]) {
 
 type FormNewUrlProps = {
   key: string;
-  value: string;
+  value: string | null;
   params: string;
 };
 
 export const formNewUrl = ({ key, value, params }: FormNewUrlProps) => {
-  console.log("formNewUrl", { key, value, params });
+  // console.log("formNewUrl", { key, value, params });
   const currentUrl = qs.parse(params);
 
   console.log("currentUrl", currentUrl);

@@ -4,14 +4,10 @@ import TagSort from "@/components/shared/Tags/TagSort";
 import { getAllTags } from "@/lib/actions/tag.action";
 import React from "react";
 
-const page = async () => {
-  const tags = await getAllTags({});
-
-  // console.log(tags);
-
-  if (!tags || tags.length == 0) {
-    return <p>No tags found</p>;
-  }
+const page = async ({ searchParams }: any) => {
+  const tags = await getAllTags({
+    searchQuery: searchParams.search,
+  });
 
   return (
     <div className="dark:text-white">
@@ -21,7 +17,7 @@ const page = async () => {
         <TagSort />
       </div>
       <div className="flex gap-8 flex-wrap">
-        {tags.map((tag) => (
+        {tags?.map((tag) => (
           <TagCard
             key={tag._id}
             _id={tag._id}
