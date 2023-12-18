@@ -48,7 +48,6 @@ export const getAllUsers = async (params: any) => {
 export const createUser = async (params: any) => {
   try {
     connectToDatabase();
-    console.log("executing createUser action");
     const { userData } = params;
 
     const user = await User.create(userData);

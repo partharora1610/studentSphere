@@ -136,30 +136,24 @@ export const upvoteQuestion = async (params: any) => {
     connectToDatabase();
 
     const { questionId, userId } = params;
-    console.log({ questionId });
-    console.log({ userId });
 
-    // we dont have a webhook connection as of now that is why this not working
-    // we are not able to fetch the user from the mongo database
-
-    const mongo_user = await User.find({ clerkId: userId });
-    // console.log({ mongoUser });
+    const mongo_user = await User.findOne({ clerkId: userId });
     const mongo_question = await Question.findById(questionId);
 
     if (!mongo_user || !mongo_question) {
-      return { data: "null" };
+      return { data: null };
     }
 
     const question = await Question.findByIdAndUpdate(
-      mongo_question._id
-      // {
-      //   $addToSet: { upvotes: mongoUser._id },
-      //   $pull: { downvotes: mongoUser._id  },
-      // },
-      // { new: true }
+      mongo_question._id,
+      {
+        $addToSet: { upvotes: mongo_user._id },
+        $pull: { downvotes: mongo_user._id },
+      },
+      { new: true }
     );
 
-    // revalidatePath(`/`);
+    revalidatePath(`/`);
     return { data: question };
   } catch (error) {
     console.log("ERROR IN UPVOTE QUESTION ACTION");
@@ -170,12 +164,10 @@ export const upvoteQuestion = async (params: any) => {
 export const downvoteQuestion = async (params: any) => {
   try {
     connectToDatabase();
-    // we can also recieve the value of hasUpvoted and hasDownvoted from the client
-    // and then update the question accordingly
 
     const { questionId, userId } = params;
 
-    const mongo_user = await User.findById({ clerkId: userId });
+    const mongo_user = await User.findOne({ clerkId: userId });
     const mongo_question = await Question.findById(questionId);
 
     if (!mongo_user || !mongo_question) {
@@ -185,12 +177,13 @@ export const downvoteQuestion = async (params: any) => {
     const question = await Question.findByIdAndUpdate(
       questionId,
       {
-        $addToSet: { downvotes: userId },
-        $pull: { upvotes: userId },
+        $addToSet: { downvotes: mongo_user._id },
+        $pull: { upvotes: mongo_user._id },
       },
       { new: true }
     );
 
+    revalidatePath(`/`);
     return { data: question };
   } catch (error) {
     console.log("ERROR IN DOWNVOTE QUESTION ACTION");
