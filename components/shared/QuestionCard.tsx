@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Card,
@@ -10,6 +12,7 @@ import {
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { upvoteQuestion } from "@/lib/actions/question.action";
 
 interface QuestionProps {
   _id: string;
@@ -28,6 +31,7 @@ interface QuestionProps {
   views: number;
   answers: Array<object>;
   createdAt: Date;
+  clerkId: string | null;
 }
 
 const QuestionCard = ({
@@ -39,38 +43,50 @@ const QuestionCard = ({
   views,
   answers,
   createdAt,
+  clerkId,
 }: QuestionProps) => {
-  return (
-    <Link href={`/question/${_id}`}>
-      <Card className="background-light900_dark200 border-none text-dark100_light900">
-        <CardHeader>
-          <h3 className="h3-semibold">{title}</h3>
+  const upvoteHandler = async () => {
+    console.log("upvote");
+    console.log(clerkId);
+    const question = await upvoteQuestion({ questionId: _id, userId: clerkId });
+    console.log({ question });
+  };
 
-          <CardDescription className="">
-            Render the tags here..
-            {/* {
+  const downvoteHandler = async () => {
+    console.log("downvote");
+    console.log(clerkId);
+  };
+
+  return (
+    <Card className="background-light900_dark200 border-none text-dark100_light900">
+      <CardHeader>
+        <Link href={`/question/${_id}`}>
+          <h3 className="h3-semibold">{title}</h3>
+        </Link>
+
+        <CardDescription className="">
+          Render the tags here..
+          {/* {
               // <RenderTag tags={question.tags} />
               question.tags.map((tag) => (
                 <RenderTag key={tag._id} tag={tag} />
               ))
             } */}
-          </CardDescription>
-        </CardHeader>
+        </CardDescription>
+      </CardHeader>
 
-        <CardFooter className="flex items-center justify-between">
-          <div className="flex gap-2">
-            <Image src="" alt="user" />
-            {/* Need to create a type that extends this so that we can use that above in the Question card params */}
-            <p>{author.name}</p>
-          </div>
-          <div className="flex gap-1 small-regular">
-            <Button>{views}</Button>
-            <Button>upvotes</Button>
-            <Button>downvotes</Button>
-          </div>
-        </CardFooter>
-      </Card>
-    </Link>
+      <CardFooter className="flex items-center justify-between">
+        <div className="flex gap-2">
+          <Image src="" alt="user" />
+          <p>{author.name}</p>
+        </div>
+        <div className="flex gap-1 small-regular">
+          <Button>{views}</Button>
+          <Button onClick={upvoteHandler}>upvotes</Button>
+          <Button onClick={downvoteHandler}>downvotes</Button>
+        </div>
+      </CardFooter>
+    </Card>
   );
 };
 

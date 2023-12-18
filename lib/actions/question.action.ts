@@ -1,13 +1,15 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { FilterQuery } from "mongoose";
+
 import Tag from "@/database/tag.models";
 import User from "@/database/user.model";
+import Question from "@/database/question.model";
+import Answer from "@/database/answer.model";
+
 import { connectToDatabase } from "../mongoose";
 import { createQuestionParams } from "../../lib/actions/shared.types";
-import Question from "@/database/question.model";
-import { revalidatePath } from "next/cache";
-import Answer from "@/database/answer.model";
-import { FilterQuery } from "mongoose";
 
 export const createQuestion = async (params: createQuestionParams) => {
   try {
@@ -134,24 +136,30 @@ export const upvoteQuestion = async (params: any) => {
     connectToDatabase();
 
     const { questionId, userId } = params;
+    console.log({ questionId });
+    console.log({ userId });
 
-    const mongo_user = await User.findById({ clerkId: userId });
+    // we dont have a webhook connection as of now that is why this not working
+    // we are not able to fetch the user from the mongo database
+
+    const mongo_user = await User.find({ clerkId: userId });
+    // console.log({ mongoUser });
     const mongo_question = await Question.findById(questionId);
 
-    // Implement edge cases better
     if (!mongo_user || !mongo_question) {
-      return { data: null };
+      return { data: "null" };
     }
 
     const question = await Question.findByIdAndUpdate(
-      questionId,
-      {
-        $addToSet: { upvotes: userId },
-        $pull: { downvotes: userId },
-      },
-      { new: true }
+      mongo_question._id
+      // {
+      //   $addToSet: { upvotes: mongoUser._id },
+      //   $pull: { downvotes: mongoUser._id  },
+      // },
+      // { new: true }
     );
 
+    // revalidatePath(`/`);
     return { data: question };
   } catch (error) {
     console.log("ERROR IN UPVOTE QUESTION ACTION");
@@ -162,6 +170,8 @@ export const upvoteQuestion = async (params: any) => {
 export const downvoteQuestion = async (params: any) => {
   try {
     connectToDatabase();
+    // we can also recieve the value of hasUpvoted and hasDownvoted from the client
+    // and then update the question accordingly
 
     const { questionId, userId } = params;
 

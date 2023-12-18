@@ -5,6 +5,7 @@ import { FilterQuery } from "mongoose";
 import User from "@/database/user.model";
 import Question from "@/database/question.model";
 import Tag from "@/database/tag.models";
+
 import { connectToDatabase } from "../mongoose";
 
 export async function getUserById(params: { userId: string }) {
@@ -41,5 +42,19 @@ export const getAllUsers = async (params: any) => {
   } catch (error) {
     console.log("ERROR IN GET ALL USER ACTION");
     console.log(error);
+  }
+};
+
+export const createUser = async (params: any) => {
+  try {
+    connectToDatabase();
+    const { userData } = params;
+
+    const user = await User.create(userData);
+
+    return { data: user };
+  } catch (error) {
+    console.log(error);
+    return { data: error };
   }
 };

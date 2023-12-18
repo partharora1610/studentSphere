@@ -6,13 +6,13 @@ export interface IUser extends mongoose.Document {
   username: string;
   email: string;
   password?: string;
+
   bio?: string;
   picture?: string;
   location?: string;
+
   portfolioUrl: string;
-
   reputaion: number;
-
   saved: Schema.Types.ObjectId[];
 
   joinedAt: Date;
@@ -24,13 +24,13 @@ const userSchema = new Schema<IUser>({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String },
+
   bio: { type: String },
   picture: { type: String },
   location: { type: String },
+
   portfolioUrl: { type: String, required: true },
-
   reputaion: { type: Number, required: true, default: 0 },
-
   saved: [{ type: Schema.Types.ObjectId, ref: "Question" }],
 
   joinedAt: { type: Date, default: Date.now },

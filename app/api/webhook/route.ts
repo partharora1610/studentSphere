@@ -1,9 +1,10 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
+import { createUser } from "@/lib/actions/user.action";
+import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
@@ -34,7 +35,6 @@ export async function POST(req: Request) {
 
   let evt: WebhookEvent;
 
-  // Verify the payload with the headers
   try {
     evt = wh.verify(body, {
       "svix-id": svix_id,
@@ -52,8 +52,33 @@ export async function POST(req: Request) {
   const { id } = evt.data;
   const eventType = evt.type;
 
-  // console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
-  // console.log("Webhook body:", body);
+  console.log(`Webhook with and ID of ${id} and type of ${eventType}`);
+  console.log("Webhook body:", body);
+  console.log({ eventType });
+
+  if (eventType === "user.created") {
+    console.log("user created webhook");
+
+    const { id, email_addresses, image_url, username, first_name, last_name } =
+      evt.data;
+
+    const mongo_user = await createUser({
+      userData: {
+        clerkId: id,
+        email: email_addresses[0].email_address,
+        image: image_url,
+        username: username!,
+        name: `${first_name} ${last_name}`,
+      },
+    });
+
+    console.log({ mongo_user });
+
+    return NextResponse.json({
+      data: mongo_user,
+      message: "OK",
+    });
+  }
 
   return new Response("", { status: 200 });
 }
