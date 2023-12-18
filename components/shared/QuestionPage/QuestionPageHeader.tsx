@@ -1,10 +1,21 @@
 import Image from "next/image";
 import React from "react";
+import QuestionAction from "./QuestionAction";
+import { auth } from "@clerk/nextjs";
 
 const QuestionPageHeader = (params: any) => {
-  // console.log(params);
-  const { title, description, author, createdAt, views, upvotes, downvotes } =
-    params;
+  const {
+    title,
+    questionId,
+    description,
+    author,
+    createdAt,
+    views,
+    upvotes,
+    downvotes,
+  } = params;
+
+  const { userId } = auth();
 
   return (
     <>
@@ -13,13 +24,15 @@ const QuestionPageHeader = (params: any) => {
           <Image src="" alt="" width={20} height={20} />
           <p className="text-dark100_light900">{author.name}</p>
         </div>
-        <div className="flex gap-1 text-dark100_light900">ACTIONS</div>
+        <div className="flex gap-1 text-dark100_light900">
+          <QuestionAction
+            views={views}
+            questionId={questionId}
+            userId={userId}
+          />
+        </div>
       </div>
-      <h3 className="text-dark100_light900 h2-semibold mb-4">
-        {/* Best practices for data fetching in a Next.js application with
-        Server-Side Rendering (SSR)? */}
-        {title}
-      </h3>
+      <h3 className="text-dark100_light900 h2-semibold mb-4">{title}</h3>
       <div className="flex gap-1 text-dark100_light900">Other details</div>
     </>
   );

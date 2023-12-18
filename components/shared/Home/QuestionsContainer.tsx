@@ -15,6 +15,7 @@ const QuestionsContainer = ({ questions }: any) => {
           tags={JSON.parse(JSON.stringify(question.tags))}
           author={JSON.parse(JSON.stringify(question.author))}
           upvotes={question.upvotes}
+          downvotes={question.downvotes}
           views={question.views}
           answers={question.answers}
           createdAt={question.createdAt}

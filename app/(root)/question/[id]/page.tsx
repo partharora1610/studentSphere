@@ -1,19 +1,17 @@
+import React from "react";
+import { auth } from "@clerk/nextjs";
+
 import AnswerForm from "@/components/shared/Forms/AnswerForm";
 import AnswerContainer from "@/components/shared/QuestionPage/AnswerContainer";
-import QuestionContent from "@/components/shared/QuestionPage/QuestionContent";
 import QuestionPageHeader from "@/components/shared/QuestionPage/QuestionPageHeader";
+import QuestionContent from "@/components/shared/QuestionPage/QuestionContent";
+
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
-import { auth, currentUser } from "@clerk/nextjs";
-import { Description } from "@radix-ui/react-dialog";
-import { Console } from "console";
-import React from "react";
 
 const Page = async ({ params }: any) => {
-  // const { userId } = auth();
-  // console.log(userId);
-
-  const userId = "12345678";
+  const { userId } = auth();
+  console.log(userId);
 
   let mongoUser;
 
@@ -30,6 +28,7 @@ const Page = async ({ params }: any) => {
   }
 
   const {
+    _id,
     title,
     description,
     tags,
@@ -45,6 +44,7 @@ const Page = async ({ params }: any) => {
   return (
     <main>
       <QuestionPageHeader
+        questionId={_id}
         title={title}
         description={description}
         author={author}

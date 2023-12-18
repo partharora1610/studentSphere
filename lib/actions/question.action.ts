@@ -52,7 +52,6 @@ export const getAllQuestion = async (params: any) => {
     console.log("executing getAllQuestion action");
 
     const { searchQuery } = params;
-    // console.log("searchQuery", searchQuery);
 
     const query: FilterQuery<typeof Question> = {};
 

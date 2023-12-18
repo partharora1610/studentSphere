@@ -12,7 +12,10 @@ import {
 import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { upvoteQuestion } from "@/lib/actions/question.action";
+import {
+  downvoteQuestion,
+  upvoteQuestion,
+} from "@/lib/actions/question.action";
 
 interface QuestionProps {
   _id: string;
@@ -28,6 +31,7 @@ interface QuestionProps {
     clerkId: string;
   };
   upvotes: string[];
+  downvotes: string[];
   views: number;
   answers: Array<object>;
   createdAt: Date;
@@ -40,6 +44,7 @@ const QuestionCard = ({
   tags,
   author,
   upvotes,
+  downvotes,
   views,
   answers,
   createdAt,
@@ -55,6 +60,11 @@ const QuestionCard = ({
   const downvoteHandler = async () => {
     console.log("downvote");
     console.log(clerkId);
+    const question = await downvoteQuestion({
+      questionId: _id,
+      userId: clerkId,
+    });
+    console.log({ question });
   };
 
   return (
@@ -81,9 +91,9 @@ const QuestionCard = ({
           <p>{author.name}</p>
         </div>
         <div className="flex gap-1 small-regular">
-          <Button>{views}</Button>
-          <Button onClick={upvoteHandler}>upvotes</Button>
-          <Button onClick={downvoteHandler}>downvotes</Button>
+          <Button>{views} views</Button>
+          <Button onClick={upvoteHandler}>{upvotes.length} up</Button>
+          <Button onClick={downvoteHandler}>{downvotes.length} down</Button>
         </div>
       </CardFooter>
     </Card>
