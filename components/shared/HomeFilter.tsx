@@ -48,6 +48,7 @@ const HomeFilter = () => {
       {FILTER.map((item, index) => {
         return (
           <Link
+            key={index}
             href="/"
             className="flex justify-between items-center"
             onClick={() => handleClick(item.value)}

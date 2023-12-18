@@ -18,6 +18,7 @@ const AnswerContainer = (params: any) => {
         {answers.map((answer: any) => {
           return (
             <AnswerCard
+              key={answer._id}
               content={answer.content}
               author={answer.author}
               upvotes={answer.upvotes}
