@@ -6,6 +6,7 @@ import { connectToDatabase } from "../mongoose";
 import Tag, { ITag } from "@/database/tag.models";
 import Question from "@/database/question.model";
 import User from "@/database/user.model";
+import { Tags } from "lucide-react";
 
 export const getAllTags = async (params: any) => {
   try {
@@ -80,9 +81,21 @@ export const getQuestionsByTagId = async (params: any) => {
 
     const questions = tag.questions;
 
-    return { tagTitle: tag.name, questions };
+    return { tagTitle: tag.name, questions: questions };
   } catch (error) {
     console.log("ERROR IN GET TAG ACTION");
+    console.log(error);
+  }
+};
+
+export const getPopularTags = async () => {
+  try {
+    connectToDatabase();
+    const tags = await Tag.find({}).sort({ questionCount: -1 }).limit(5);
+
+    return { data: tags };
+  } catch (error) {
+    console.log("ERROR IN GET POPULAR TAGS ACTION");
     console.log(error);
   }
 };

@@ -233,3 +233,17 @@ export async function deleteQuestion(params: any) {
     console.log(error);
   }
 }
+
+export const getHotQuestions = async () => {
+  try {
+    connectToDatabase();
+    const questions = await Question.find({})
+      .sort({ upvotes: -1, views: -1 })
+      .limit(5);
+
+    return { data: questions };
+  } catch (error) {
+    console.log("ERROR IN GET HOT QUESTIONS ACTION");
+    console.log(error);
+  }
+};

@@ -3,20 +3,19 @@ import React from "react";
 import { Button } from "../ui/button";
 
 interface RenderTagProps {
-  title: string;
-  url: string;
-  articles?: number;
-  value?: string;
+  name: string;
+  questions?: number;
+  id: string;
 }
 
-const RenderTag = ({ title, url, articles }: RenderTagProps) => {
+const RenderTag = ({ name, questions, id }: RenderTagProps) => {
   return (
     <>
-      <Link href="/url" className="flex justify-between items-center ">
+      <Link href={`/tags/${id}`} className="flex justify-between items-center ">
         <Button className="text-light-500 small-regular background-light800_dark300">
-          {title}
+          {name}
         </Button>
-        <p className="small-regular text-dark100_light900 ">{articles}</p>
+        <p className="small-regular text-dark100_light900 ">{questions}</p>
       </Link>
     </>
   );
