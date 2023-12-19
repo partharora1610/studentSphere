@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { Button } from "../ui/button";
-import { formNewUrl } from "@/lib/utils";
+// import { formNewUrl } from "@/lib/utils";
 
 const FILTER = [
   {
@@ -35,16 +34,42 @@ const HomeFilter = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [active, setActive] = useState("");
+  // const [active, setActive] = useState("");
 
   const handleClick = (item: string) => {
     console.log(item);
-    router.push("/tags");
+    router.push("/ask-question", { scroll: false });
+    // console.log(router);
+
+    // if (active == item) {
+    //   // setActive("");
+
+    //   const newURL = formNewUrl({
+    //     params: searchParams.toString(),
+    //     key: "filter",
+    //     value: null,
+    //   });
+    //   console.log({ newURL });
+
+    //   router.push(newURL, { scroll: false });
+    // } else {
+    //   // setActive(item);
+
+    //   const newURL = formNewUrl({
+    //     params: searchParams.toString(),
+    //     key: "filter",
+    //     value: item.toLowerCase(),
+    //   });
+
+    //   console.log({ newURL });
+
+    //   router.push(newURL, { scroll: false });
+    // }
   };
 
   return (
     <div className="flex gap-4 mb-8">
-      <p className="text-white">{active}</p>
+      {/* <p className="text-white">{active}</p> */}
       {FILTER.map((item, index) => {
         return (
           <Link

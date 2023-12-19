@@ -16,24 +16,28 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 
 import { QuestionFormSchema } from "@/lib/validations";
 import { createQuestion } from "@/lib/actions/question.action";
 import { usePathname, useRouter } from "next/navigation";
 
-export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
+export function QuestionForm(params: any) {
+  const { mongoUserId, type, questionDetails } = params;
+
+  const parsedQuestionDetails = JSON.parse(questionDetails);
+  console.log({ parsedQuestionDetails });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
 
-  // declaring the default values
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
     resolver: zodResolver(QuestionFormSchema),
     defaultValues: {
-      title: "",
-      description: "",
+      title: parsedQuestionDetails.data.title || "",
+      description: parsedQuestionDetails.data.description || "",
       tags: [],
     },
   });
@@ -69,9 +73,6 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
 
   const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true);
-
-    // console.log(values);
-    // console.log(values.title);
 
     try {
       await createQuestion({
@@ -109,8 +110,9 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
                 />
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Be specific and imagine you’re asking a question to another
-                person.
+                {type == "edit"
+                  ? ""
+                  : "Be specific and imagine you’re asking a question to another person."}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -153,9 +155,15 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
                   <Input
                     className="no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56px] border"
                     placeholder="Add tags..."
-                    onKeyDown={(e) => handleInputKeyDown(e, field)}
+                    disabled={type == "edit" ? true : false}
+                    onKeyDown={
+                      type == "edit"
+                        ? () => {}
+                        : (e) => handleInputKeyDown(e, field)
+                    }
                   />
 
+                  {/* Show tags here in case of the edit */}
                   {field.value.length > 0 && (
                     <div className="flex-start mt-2.5 gap-2.5">
                       {field.value.map((tag: any) => (
@@ -171,8 +179,9 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
                 </>
               </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
-                Add up to 3 tags to describe what your question is about. You
-                need to press enter to add a tag.
+                {type == "edit"
+                  ? "Editing tags is not allowed. I need to show the tags here"
+                  : "Add up to 3 tags to describe what your question is about. You need to press enter to add a tag"}
               </FormDescription>
               <FormMessage className="text-red-500" />
             </FormItem>
@@ -180,7 +189,7 @@ export function QuestionForm({ mongoUserId }: { mongoUserId: string }) {
         />
         <div className="flex items-center justify-end">
           <Button type="submit" className="bg-blue-600">
-            Submit
+            {type == "create" ? "Create Question" : "Edit Question"}
           </Button>
         </div>
       </form>

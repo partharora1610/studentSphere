@@ -10,6 +10,7 @@ import Answer from "@/database/answer.model";
 
 import { connectToDatabase } from "../mongoose";
 import { createQuestionParams } from "../../lib/actions/shared.types";
+import Interaction from "@/database/interaction.model";
 
 export const createQuestion = async (params: createQuestionParams) => {
   try {
@@ -189,3 +190,46 @@ export const downvoteQuestion = async (params: any) => {
     console.log(error);
   }
 };
+
+export async function editQuestion(params: any) {
+  try {
+    connectToDatabase();
+
+    const { title, description, path, questionId } = params;
+
+    const question = await Question.findById(questionId).populate("tags");
+
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    question.title = title;
+    question.description = description;
+
+    await question.save();
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deleteQuestion(params: any) {
+  try {
+    connectToDatabase();
+
+    const { questionId, path } = params;
+
+    await Question.deleteOne({ _id: questionId });
+    await Answer.deleteMany({ question: questionId });
+    await Interaction.deleteMany({ question: questionId });
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    );
+
+    revalidatePath(path);
+  } catch (error) {
+    console.log(error);
+  }
+}

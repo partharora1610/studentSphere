@@ -16,6 +16,7 @@ import {
   downvoteQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
+import { SignedIn } from "@clerk/nextjs";
 
 interface QuestionProps {
   _id: string;
@@ -54,7 +55,6 @@ const QuestionCard = ({
     console.log("upvote");
     console.log(clerkId);
     const question = await upvoteQuestion({ questionId: _id, userId: clerkId });
-    console.log({ question });
   };
 
   const downvoteHandler = async () => {
@@ -64,15 +64,37 @@ const QuestionCard = ({
       questionId: _id,
       userId: clerkId,
     });
-    console.log({ question });
   };
 
+  const editQuestionHandler = async () => {
+    console.log("edit");
+  };
+
+  const deleteQuestionHandler = async () => {
+    console.log("delete");
+  };
+
+  const showActionButtons = clerkId && clerkId === author.clerkId;
+
   return (
-    <Card className="background-light900_dark200 border-none text-dark100_light900">
+    <Card className="background-light900_dark200 border-none text-dark100_light900 px-4">
       <CardHeader>
-        <Link href={`/question/${_id}`}>
-          <h3 className="h3-semibold">{title}</h3>
-        </Link>
+        <div className="flex justify-between">
+          <Link href={`/question/${_id}`}>
+            <h3 className="h3-semibold">{title}</h3>
+          </Link>
+
+          <SignedIn>
+            {showActionButtons && (
+              <div className="flex gap-2">
+                <Link href={`/question/edit/${_id}`}>
+                  <Button onClick={editQuestionHandler}>Edit</Button>
+                </Link>
+                <Button onClick={deleteQuestionHandler}>Delete</Button>
+              </div>
+            )}
+          </SignedIn>
+        </div>
 
         <CardDescription className="">
           Render the tags here..
