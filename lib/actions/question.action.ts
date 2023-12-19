@@ -52,7 +52,9 @@ export const getAllQuestion = async (params: any) => {
     connectToDatabase();
     console.log("executing getAllQuestion action");
 
-    const { searchQuery } = params;
+    const { searchQuery, page = 1, pageSize = 4 } = params;
+
+    const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Question> = {};
 
@@ -71,11 +73,14 @@ export const getAllQuestion = async (params: any) => {
       .populate({
         path: "author",
         model: User,
-      });
+      })
+      .skip(skipAmount)
+      .limit(pageSize);
 
-    // console.log("questions", questions);
+    const totalQuestions = await Question.countDocuments(query);
+    const isNext = totalQuestions > skipAmount + questions.length;
 
-    return { questions };
+    return { questions, isNext };
   } catch (error) {
     console.log("ERROR IN GET ALL QUESTION ACTION");
     console.log(error);

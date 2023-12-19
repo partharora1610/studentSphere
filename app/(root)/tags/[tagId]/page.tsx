@@ -16,7 +16,7 @@ const Page = async ({ searchParams, params }: any) => {
 
   return (
     <div className="dark:text-white">
-      <h2 className="h2-bold mb-10">All Users</h2>
+      <h2 className="h2-bold mb-10">TAG</h2>
       <div className="flex items-center gap-4">
         <LocalSearch placeholder="Search tags questions..." />
 

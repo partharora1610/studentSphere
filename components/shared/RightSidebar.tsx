@@ -8,7 +8,6 @@ import { getPopularTags } from "@/lib/actions/tag.action";
 const RightSidebar = async () => {
   const hotQuestions = await getHotQuestions();
   const popularTags = await getPopularTags();
-  console.log(popularTags?.data);
 
   return (
     <section className="background-light900_dark200 light-border custom-scrollbar sticky right-0 top-0 flex h-screen flex-col gap-16 overflow-y-auto border-r p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[350px]">
@@ -44,7 +43,7 @@ const RightSidebar = async () => {
               <RenderTag
                 key={tag._id}
                 name={tag.name}
-                questions={tag.questions.length}
+                numberOfQuestion={tag.numberOfQuestion}
                 id={tag._id}
               />
             );

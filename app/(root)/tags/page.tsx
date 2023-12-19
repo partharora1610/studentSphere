@@ -1,13 +1,17 @@
 import TagCard from "@/components/shared/Cards/TagCard";
+import Pagination from "@/components/shared/Pagination";
 import LocalSearch from "@/components/shared/Search/LocalSearch";
 import TagSort from "@/components/shared/Tags/TagSort";
 import { getAllTags } from "@/lib/actions/tag.action";
 import React from "react";
 
 const page = async ({ searchParams }: any) => {
-  const tags = await getAllTags({
+  const data = await getAllTags({
     searchQuery: searchParams.search,
+    page: searchParams.page ? +searchParams.page : 1,
   });
+
+  // const { tags } = data;
 
   return (
     <div className="dark:text-white">
@@ -17,7 +21,7 @@ const page = async ({ searchParams }: any) => {
         <TagSort />
       </div>
       <div className="flex gap-8 flex-wrap">
-        {tags?.map((tag) => (
+        {data?.tags?.map((tag) => (
           <TagCard
             key={tag._id}
             _id={tag._id}
@@ -29,6 +33,10 @@ const page = async ({ searchParams }: any) => {
           />
         ))}
       </div>
+      <Pagination
+        pageNumber={searchParams?.page ? +searchParams.page : 1}
+        isNext={data?.isNext}
+      />
     </div>
   );
 };

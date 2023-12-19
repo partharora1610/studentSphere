@@ -6,12 +6,12 @@ import { connectToDatabase } from "../mongoose";
 import Tag, { ITag } from "@/database/tag.models";
 import Question from "@/database/question.model";
 import User from "@/database/user.model";
-import { Tags } from "lucide-react";
 
 export const getAllTags = async (params: any) => {
   try {
     connectToDatabase();
-    const { searchQuery } = params;
+    const { searchQuery, page = 1, pageSize = 5 } = params;
+    const skipAmount = (page - 1) * pageSize;
 
     const query: FilterQuery<typeof Tag> = {};
 
@@ -22,9 +22,12 @@ export const getAllTags = async (params: any) => {
       ];
     }
 
-    const tags = await Tag.find(query);
+    const tags = await Tag.find(query).skip(skipAmount).limit(pageSize);
 
-    return tags;
+    const totalTags = await Tag.countDocuments(query);
+    const isNext = totalTags > skipAmount + tags.length;
+
+    return { tags, isNext };
   } catch (error) {
     console.log("ERROR IN GET ALL TAGS ACTION");
     console.log(error);
@@ -91,7 +94,17 @@ export const getQuestionsByTagId = async (params: any) => {
 export const getPopularTags = async () => {
   try {
     connectToDatabase();
-    const tags = await Tag.find({}).sort({ questionCount: -1 }).limit(5);
+
+    const tags = await Tag.aggregate([
+      {
+        $project: {
+          name: 1,
+          numberOfQuestion: { $size: "$questions" },
+        },
+      },
+      { $sort: { questionCount: -1 } },
+      { $limit: 5 },
+    ]);
 
     return { data: tags };
   } catch (error) {
