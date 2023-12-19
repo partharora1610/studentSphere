@@ -13,6 +13,7 @@ import Image from "next/image";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import {
+  deleteQuestion,
   downvoteQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
@@ -66,12 +67,13 @@ const QuestionCard = ({
     });
   };
 
-  const editQuestionHandler = async () => {
-    console.log("edit");
-  };
-
   const deleteQuestionHandler = async () => {
     console.log("delete");
+
+    // console.log({ _id });
+    // delete the question and revalidate the path
+    // better UX would be I just open modal here and ask for confirmation
+    await deleteQuestion({ questionId: _id });
   };
 
   const showActionButtons = clerkId && clerkId === author.clerkId;
@@ -88,7 +90,7 @@ const QuestionCard = ({
             {showActionButtons && (
               <div className="flex gap-2">
                 <Link href={`/question/edit/${_id}`}>
-                  <Button onClick={editQuestionHandler}>Edit</Button>
+                  <Button>Edit</Button>
                 </Link>
                 <Button onClick={deleteQuestionHandler}>Delete</Button>
               </div>

@@ -22,12 +22,18 @@ import { QuestionFormSchema } from "@/lib/validations";
 import { createQuestion } from "@/lib/actions/question.action";
 import { usePathname, useRouter } from "next/navigation";
 
-export function QuestionForm(params: any) {
-  const { mongoUserId, type, questionDetails } = params;
+type QuestionFormProps = {
+  mongoUserId: string;
+  type: string;
+  questionDetails?: string;
+};
+
+export function QuestionForm(props: any) {
+  const { mongoUserId, type, questionDetails } = props;
 
   const parsedQuestionDetails = JSON.parse(questionDetails);
-  console.log({ parsedQuestionDetails });
 
+  // use this
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -36,8 +42,8 @@ export function QuestionForm(params: any) {
   const form = useForm<z.infer<typeof QuestionFormSchema>>({
     resolver: zodResolver(QuestionFormSchema),
     defaultValues: {
-      title: parsedQuestionDetails.data.title || "",
-      description: parsedQuestionDetails.data.description || "",
+      title: parsedQuestionDetails?.data?.title || "",
+      description: parsedQuestionDetails?.data?.description || "",
       tags: [],
     },
   });
