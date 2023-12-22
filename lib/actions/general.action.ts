@@ -44,8 +44,6 @@ export const globalSearch = async (params: any) => {
     const typeLower = type?.toLowerCase();
 
     if (!typeLower || !searchableTypes.includes(typeLower)) {
-      // SEARCH WITH EVERYWHERE...
-
       for (const { model, searchfield, type } of modelsAndTypes) {
         const queryResult = await model
           .find({
@@ -53,7 +51,22 @@ export const globalSearch = async (params: any) => {
           })
           .limit(2);
 
-        // pushing the data in the results array
+        // PUSHING THE DATA IN THE RESULTS ARRAY
+        result.push(
+          ...queryResult.map((item: any) => ({
+            title:
+              type === "answer"
+                ? `Answer Containing ${query}`
+                : item[searchfield],
+            type,
+            id:
+              type === "user"
+                ? item.clerkId
+                : type === "answer"
+                ? item.question
+                : item._id,
+          }))
+        );
       }
     } else {
       const modelInfo = modelsAndTypes.find((item) => item.type === type);
@@ -62,14 +75,29 @@ export const globalSearch = async (params: any) => {
         throw new Error("Invalid type entry by the user");
       }
 
-      const queryResult = modelInfo.model
+      const queryResult = await modelInfo.model
         .find({
           [modelInfo.searchfield]: regexQuery,
         })
         .limit(8);
+
+      // PUSHING THE DATA IN THE RESULTS ARRAY
+      result = queryResult.map((item: any) => ({
+        title:
+          type === "answer"
+            ? `Answer Containing ${query}`
+            : item[modelInfo.searchfield],
+        type,
+        id:
+          type === "user"
+            ? item.clerkId
+            : type === "answer"
+            ? item.question
+            : item._id,
+      }));
     }
 
-    return { data: result };
+    return result;
   } catch (error) {
     console.log(error);
     throw error;

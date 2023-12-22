@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useSearchParams } from "next/navigation";
 import GlobalFilter from "./GlobalFilter";
+import { globalSearch } from "@/lib/actions/general.action";
 
 const GlobalResult = () => {
   const searchParams = useSearchParams();
@@ -17,13 +18,20 @@ const GlobalResult = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        // fetch data
+        const data = await globalSearch({ query: global, type: type });
+        console.log(data);
+        setResult(data);
       } catch (error) {
         console.log(error);
+        throw error;
       } finally {
         setIsLoading(false);
       }
     };
+
+    if (global) {
+      fetchData();
+    }
   }, [global, type]);
 
   return (
@@ -43,16 +51,15 @@ const GlobalResult = () => {
           <p className="text-center p-4 py-10">Browsing the entire database</p>
         ) : (
           <div className="flex flex-col">
-            {/* render results here...... */}
-
             {result.length != 0 ? (
-              <p>show data</p>
+              <div>
+                {result.map((item: any) => {
+                  return <Card title={item.title} type={item.type} />;
+                })}
+              </div>
             ) : (
               <p>No Matching data to show</p>
             )}
-            <Question />
-            <Question />
-            <Question />
           </div>
         )}
       </div>
@@ -60,10 +67,12 @@ const GlobalResult = () => {
   );
 };
 
-const Question = () => {
+const Card = (props: any) => {
+  const { title, type } = props;
   return (
     <div className="background-light800_dark400 px-2 py-4">
-      <p>Question</p>
+      <p>{title}</p>
+      <p>{type}</p>
     </div>
   );
 };
