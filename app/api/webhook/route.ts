@@ -50,6 +50,9 @@ export async function POST(req: Request) {
   const { id } = evt.data;
   const eventType = evt.type;
 
+  console.log({ id, eventType });
+  console.log({ data: evt.data });
+
   if (eventType === "user.created") {
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data;
@@ -66,6 +69,8 @@ export async function POST(req: Request) {
         name: `${first_name} ${last_name}`,
       },
     });
+
+    console.log({ mongo_user });
 
     return NextResponse.json({
       data: mongo_user,
