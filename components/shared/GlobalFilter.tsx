@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formNewUrl } from "@/lib/utils";
 
+// need to move this to anotehr file
 const FilterConstants = [
   {
     title: "Question",
@@ -60,6 +61,7 @@ const GlobalFilter = () => {
       {FilterConstants.map((tag) => {
         return (
           <Button
+            key={tag.title}
             size="sm"
             className="background-light700_dark300 rounded-full px-5 hover:text-primary-500"
             onClick={() => tagClickHandler(tag.title)}

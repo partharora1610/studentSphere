@@ -24,9 +24,9 @@ const Page = async ({ searchParams, params }: any) => {
       </div>
 
       <div className="flex flex-col gap-6">
-        {results?.questions.map((question: any) => {
+        {results?.questions.map((question: any, index: any) => {
           return (
-            <div>CARD</div>
+            <div key={index}>CARD</div>
             // <QuestionCard
             //   key={question._id}
             //   _id={question._id}
