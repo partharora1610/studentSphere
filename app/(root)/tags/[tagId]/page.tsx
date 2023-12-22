@@ -1,4 +1,4 @@
-import QuestionCard from "@/components/shared/QuestionCard";
+import QuestionCard from "@/components/shared/Cards/QuestionCard";
 import LocalSearch from "@/components/shared/Search/LocalSearch";
 import TagSort from "@/components/shared/Tags/TagSort";
 import { getQuestionsByTagId } from "@/lib/actions/tag.action";
