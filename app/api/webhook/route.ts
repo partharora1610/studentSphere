@@ -54,12 +54,15 @@ export async function POST(req: Request) {
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data;
 
+    console.log(evt.data);
+    console.log({ username });
+
     const mongo_user = await createUser({
       userData: {
         clerkId: id,
         email: email_addresses[0].email_address,
         image: image_url,
-        username: username!,
+        username: first_name,
         name: `${first_name} ${last_name}`,
       },
     });

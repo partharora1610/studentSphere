@@ -5,7 +5,6 @@ import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formNewUrl } from "@/lib/utils";
 
-// need to move this to anotehr file
 const FilterConstants = [
   {
     title: "Question",
