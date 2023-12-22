@@ -123,7 +123,7 @@ export const getQuestionOfUser = async (params: any) => {
 
     const { _id } = params;
 
-    const questions = await Question.findOne({ author: _id }).populate({
+    const questions = await Question.find({ author: _id }).populate({
       path: "tags",
       model: Tag,
     });

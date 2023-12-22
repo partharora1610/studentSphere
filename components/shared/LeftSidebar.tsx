@@ -50,10 +50,10 @@ const sidebarLinks: SidebarLink[] = [
   },
 ];
 
-const LeftSidebar = () => {
+const LeftSidebar = (props: any) => {
   const pathname = usePathname();
-  // className="p-6 pt-36 flex flex-col justify-between background-light900_dark200
-  // h-screen sticky top-0 left-0 z-50 overflow-y-auto shadow-light-300 custom-scrollbar dark:shadow-none max-sm:hidden lg:w-[266px]"
+  const { userId } = props;
+
   return (
     <section className="background-light900_dark200 light-border custom-scrollbar sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-r p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px]">
       <div className="flex flex-col gap-6">
@@ -65,7 +65,15 @@ const LeftSidebar = () => {
                 pathname === link.route ? "primary-gradient" : ""
               } p-4 base-semibold flex items-center justify-center rounded-xl m-auto w-[200px] dark:text-white`}
             >
-              <Link href={link.route}>{link.label}</Link>
+              <Link
+                href={
+                  link.label.toLowerCase() === "profile"
+                    ? `/profile/${userId}`
+                    : link.route
+                }
+              >
+                {link.label}
+              </Link>
             </div>
           );
         })}

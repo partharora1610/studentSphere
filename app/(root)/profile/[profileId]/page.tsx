@@ -6,17 +6,18 @@ import {
   getQuestionOfUser,
 } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
+import { auth } from "@clerk/nextjs";
 
 import React from "react";
 
 const page = async () => {
-  const userId = "12345678";
+  const { userId } = auth();
 
   if (!userId) {
     return <p>Not authorized</p>;
   }
 
-  const profile = await getUserById({ userId });
+  const profile = await getUserById({ userId: userId });
 
   const {
     _id,
@@ -24,21 +25,13 @@ const page = async () => {
     username,
     email,
     bio,
-    picture,
+    image,
     location,
     portfolioUrl,
     reputaion,
     saved,
     joinedAt,
   } = profile;
-
-  const questions = await getQuestionOfUser({ _id });
-
-  // console.log(questions);
-
-  if (!questions) {
-    return <p>Not authorized</p>;
-  }
 
   return (
     <div>
@@ -47,6 +40,7 @@ const page = async () => {
         username={username}
         email={email}
         bio={bio}
+        image={image}
         // joinedAt={joinedAt}
         // picture={picture}
         // location={location}
@@ -55,8 +49,7 @@ const page = async () => {
         // // saved={saved}
       />
       <ProfileStats />
-      {/* This is giving error here */}
-      <ProfileContent questions={questions} />
+      <ProfileContent userId={_id} />
     </div>
   );
 };

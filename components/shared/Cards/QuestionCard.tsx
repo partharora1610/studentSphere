@@ -34,7 +34,7 @@ interface QuestionProps {
     picture: string;
     clerkId: string;
   };
-  upvotes: string[];
+  upvotes?: string[];
   downvotes: string[];
   views: number;
   answers: Array<object>;
@@ -50,36 +50,27 @@ const QuestionCard = ({
   upvotes,
   downvotes,
   views,
-  answers,
   createdAt,
   clerkId,
-}: QuestionProps) => {
+}: any) => {
   const upvoteHandler = async () => {
-    // console.log("upvote");
-    // console.log(clerkId);
-    const question = await upvoteQuestion({ questionId: _id, userId: clerkId });
+    await upvoteQuestion({ questionId: _id, userId: clerkId });
   };
 
   const downvoteHandler = async () => {
-    // console.log("downvote");
-    // console.log(clerkId);
-    const question = await downvoteQuestion({
+    await downvoteQuestion({
       questionId: _id,
       userId: clerkId,
     });
   };
 
   const saveHandler = async () => {
-    console.log("save");
     await saveQuestion({ questionId: _id, userId: clerkId });
   };
 
-  const deleteQuestionHandler = async () => {
-    console.log("delete");
+  const unsaveHandler = async () => {};
 
-    // console.log({ _id });
-    // delete the question and revalidate the path
-    // better UX would be I just open modal here and ask for confirmation
+  const deleteQuestionHandler = async () => {
     await deleteQuestion({ questionId: _id });
   };
 

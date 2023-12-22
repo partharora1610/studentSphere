@@ -11,7 +11,7 @@ import React from "react";
 import Image from "next/image";
 
 const CommunityCard = (params: any) => {
-  const { name, username, _id } = params;
+  const { name, username, _id, image } = params;
 
   return (
     <>
@@ -19,7 +19,7 @@ const CommunityCard = (params: any) => {
         <Card className="border-none background-light900_dark200">
           <CardHeader>
             <Image
-              src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+              src={image}
               alt="user image"
               width={100}
               height={100}

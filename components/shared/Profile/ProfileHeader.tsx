@@ -2,18 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-const ProfileHeader = ({
-  name,
-  username,
-
-  joinedAt,
-}: any) => {
+const ProfileHeader = ({ name, username, image, joinedAt }: any) => {
   return (
     <>
       <div className="flex justify-between text-dark100_light900 mb-16">
         <div className="flex gap-4">
           <Image
-            src="https://w7.pngwing.com/pngs/340/946/png-transparent-avatar-user-computer-icons-software-developer-avatar-child-face-heroes-thumbnail.png"
+            src={image}
             alt="user image"
             width={100}
             height={100}

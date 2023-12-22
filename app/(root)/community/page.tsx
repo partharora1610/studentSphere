@@ -25,6 +25,7 @@ const page = async ({ searchParams }: any) => {
             name={user.name}
             _id={user._id}
             username={user.username}
+            image={user.image}
           />
         ))}
       </div>
