@@ -251,3 +251,76 @@ export const getHotQuestions = async () => {
     console.log(error);
   }
 };
+
+export const getSavedQuestions = async (params: any) => {
+  try {
+    connectToDatabase();
+    // This is the clerkId
+    const { userId } = params;
+
+    const user = await User.findOne({ clerkId: userId }).populate({
+      path: "saved",
+      model: Question,
+      populate: {
+        path: "tags",
+        model: Tag,
+      },
+    });
+
+    return { data: user.saved };
+  } catch (error) {
+    console.log("ERROR IN GET SAVED QUESTIONS ACTION");
+    console.log(error);
+  }
+};
+
+export const saveQuestion = async (params: any) => {
+  try {
+    connectToDatabase();
+    const { questionId, userId } = params;
+
+    console.log(questionId, userId);
+
+    const user = await User.findOneAndUpdate(
+      { clerkId: userId },
+      {
+        $push: { saved: questionId },
+      },
+      { new: true }
+    );
+
+    revalidatePath(`/collection`);
+    return { data: null };
+  } catch (error) {
+    console.log("ERROR IN SAVE QUESTION ACTION");
+    console.log(error);
+  }
+};
+
+export const unsaveQuestion = async (params: any) => {
+  try {
+    connectToDatabase();
+    const { questionId, userId } = params;
+
+    const mongo_user = await User.findOne({ clerkId: userId });
+    const mongo_question = await Question.findById(questionId);
+
+    if (!mongo_user || !mongo_question) {
+      return { data: "Invalid request from the client..." };
+    }
+
+    const user = await User.findOneAndUpdate(
+      { clerkId: userId },
+      {
+        $pull: { saved: questionId },
+      },
+      { new: true }
+    );
+
+    revalidatePath(`/collection`);
+    return { data: null };
+  } catch (error) {
+    console.log("ERROR IN SAVE QUESTION ACTION");
+    console.log(error);
+  }
+};

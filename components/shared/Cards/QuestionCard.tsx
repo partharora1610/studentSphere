@@ -15,6 +15,7 @@ import Link from "next/link";
 import {
   deleteQuestion,
   downvoteQuestion,
+  saveQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
 import { SignedIn } from "@clerk/nextjs";
@@ -66,6 +67,11 @@ const QuestionCard = ({
       questionId: _id,
       userId: clerkId,
     });
+  };
+
+  const saveHandler = async () => {
+    console.log("save");
+    await saveQuestion({ questionId: _id, userId: clerkId });
   };
 
   const deleteQuestionHandler = async () => {
@@ -120,6 +126,7 @@ const QuestionCard = ({
           <Button onClick={downvoteHandler}>{downvotes.length} down</Button>
         </div>
       </CardFooter>
+      <Button onClick={saveHandler}>Save</Button>
     </Card>
   );
 };
