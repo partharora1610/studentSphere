@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Image from "next/image";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import Link from "next/link";
 import {
   deleteQuestion,
@@ -18,6 +18,7 @@ import {
   upvoteQuestion,
 } from "@/lib/actions/question.action";
 import { SignedIn } from "@clerk/nextjs";
+import RenderTag from "../RenderTag";
 
 interface QuestionProps {
   _id: string;
@@ -53,14 +54,14 @@ const QuestionCard = ({
   clerkId,
 }: QuestionProps) => {
   const upvoteHandler = async () => {
-    console.log("upvote");
-    console.log(clerkId);
+    // console.log("upvote");
+    // console.log(clerkId);
     const question = await upvoteQuestion({ questionId: _id, userId: clerkId });
   };
 
   const downvoteHandler = async () => {
-    console.log("downvote");
-    console.log(clerkId);
+    // console.log("downvote");
+    // console.log(clerkId);
     const question = await downvoteQuestion({
       questionId: _id,
       userId: clerkId,
@@ -99,20 +100,19 @@ const QuestionCard = ({
         </div>
 
         <CardDescription className="">
-          Render the tags here..
-          {/* {
-              // <RenderTag tags={question.tags} />
-              question.tags.map((tag) => (
-                <RenderTag key={tag._id} tag={tag} />
-              ))
-            } */}
+          <div className="flex gap-3">
+            {tags.map((tag: any) => {
+              return <RenderTag key={tag._id} id={tag._id} name={tag.name} />;
+            })}
+          </div>
         </CardDescription>
       </CardHeader>
 
       <CardFooter className="flex items-center justify-between">
         <div className="flex gap-2">
-          <Image src="" alt="user" />
+          <Image src={""} alt="user" />
           <p>{author.name}</p>
+          <p>timestamp</p>
         </div>
         <div className="flex gap-1 small-regular">
           <Button>{views} views</Button>

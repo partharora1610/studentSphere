@@ -36,17 +36,19 @@ const Pagination = (Props: any) => {
       <Button
         disabled={pageNumber === 1}
         onClick={() => handleNavigation("prev")}
-        className="background-light800_dark400"
+        className="background-light800_dark400 text-white w-[50px] h-[40px]"
       >
         Prev
       </Button>
 
-      <div>{pageNumber}</div>
+      <div className="bg-primary-500 text-white rounded-md w-[50px] h-[40px] flex items-center justify-center">
+        {pageNumber}
+      </div>
 
       <Button
         disabled={!isNext}
         onClick={() => handleNavigation("next")}
-        className="background-light800_dark400"
+        className="background-light800_dark400 text-white w-[50px] h-[40px]"
       >
         Next
       </Button>

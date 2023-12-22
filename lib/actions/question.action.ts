@@ -7,10 +7,10 @@ import Tag from "@/database/tag.models";
 import User from "@/database/user.model";
 import Question from "@/database/question.model";
 import Answer from "@/database/answer.model";
+import Interaction from "@/database/interaction.model";
 
 import { connectToDatabase } from "../mongoose";
 import { createQuestionParams } from "../../lib/actions/shared.types";
-import Interaction from "@/database/interaction.model";
 
 export const createQuestion = async (params: createQuestionParams) => {
   try {
@@ -50,7 +50,6 @@ export const createQuestion = async (params: createQuestionParams) => {
 export const getAllQuestion = async (params: any) => {
   try {
     connectToDatabase();
-    console.log("executing getAllQuestion action");
 
     const { searchQuery, page = 1, pageSize = 4 } = params;
 

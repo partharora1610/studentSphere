@@ -1,5 +1,5 @@
 import React from "react";
-import QuestionCard from "../QuestionCard";
+import QuestionCard from "../Cards/QuestionCard";
 import { auth } from "@clerk/nextjs";
 
 const QuestionsContainer = ({ questions }: any) => {

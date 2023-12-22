@@ -11,7 +11,7 @@ import { getUserById } from "@/lib/actions/user.action";
 
 const Page = async ({ params }: any) => {
   const { userId } = auth();
-  console.log(userId);
+  // console.log(userId);
 
   let mongoUser;
 

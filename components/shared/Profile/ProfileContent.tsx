@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 // import React, { useEffect, useState } from "react";
-import QuestionCard from "../QuestionCard";
+import QuestionCard from "../Cards/QuestionCard";
 
 const CONSTANTS = [
   {

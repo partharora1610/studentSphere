@@ -8,7 +8,7 @@ export interface IUser extends mongoose.Document {
   password?: string;
 
   bio?: string;
-  picture?: string;
+  image?: string;
   location?: string;
 
   portfolioUrl: string;
@@ -26,7 +26,7 @@ const userSchema = new Schema<IUser>({
   password: { type: String },
 
   bio: { type: String },
-  picture: { type: String },
+  image: { type: String },
   location: { type: String },
 
   portfolioUrl: { type: String },

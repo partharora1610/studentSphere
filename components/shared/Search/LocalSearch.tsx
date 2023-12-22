@@ -34,7 +34,7 @@ const LocalSearch = ({ placeholder }: LocalSearchProps) => {
         });
         router.push(newURL, { scroll: false });
       }
-    }, 1000);
+    }, 300);
 
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
