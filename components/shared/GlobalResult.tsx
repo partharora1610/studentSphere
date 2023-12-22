@@ -5,6 +5,8 @@ import { Button } from "../ui/button";
 import { useSearchParams } from "next/navigation";
 import GlobalFilter from "./GlobalFilter";
 import { globalSearch } from "@/lib/actions/general.action";
+import Link from "next/link";
+import { formNewUrl } from "@/lib/utils";
 
 const GlobalResult = () => {
   const searchParams = useSearchParams();
@@ -52,9 +54,16 @@ const GlobalResult = () => {
         ) : (
           <div className="flex flex-col">
             {result.length != 0 ? (
-              <div>
-                {result.map((item: any) => {
-                  return <Card title={item.title} type={item.type} />;
+              <div className="flex flex-col gap-2">
+                {result.map((item: any, index) => {
+                  return (
+                    <Card
+                      key={index}
+                      title={item.title}
+                      type={item.type}
+                      id={item.id}
+                    />
+                  );
                 })}
               </div>
             ) : (
@@ -68,12 +77,21 @@ const GlobalResult = () => {
 };
 
 const Card = (props: any) => {
-  const { title, type } = props;
+  const { title, type, id } = props;
+
+  // and here while clicking the Link we need to clear the global ssearch
+
+  // construct the URL for the page
+  // or we can also use the router.push() method by using the button or we need to remove the search params from the URL
+
   return (
-    <div className="background-light800_dark400 px-2 py-4">
+    <Link
+      href={`/${type}/${id}}`}
+      className="background-light800_dark400 px-2 py-4 hover:text-gray-500"
+    >
       <p>{title}</p>
       <p>{type}</p>
-    </div>
+    </Link>
   );
 };
 

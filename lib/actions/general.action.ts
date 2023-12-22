@@ -15,7 +15,6 @@ export const globalSearch = async (params: any) => {
     const { type, query } = params;
     const regexQuery = { $regex: query, $options: "i" };
 
-    // WILL POPULATE RESULTS WITH DATA FROM THE DATABASE...
     let result: any = [];
 
     const modelsAndTypes = [
