@@ -30,7 +30,7 @@ const AnswerForm = (params: any) => {
   });
 
   const onSubmit = async (values: z.infer<typeof AnswerFormSchema>) => {
-    // console.log(values);
+    console.log(values);
 
     const answer = await createAnswer({
       question: questionId,

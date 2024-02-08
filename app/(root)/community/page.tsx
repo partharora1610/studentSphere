@@ -9,6 +9,7 @@ import { getAllUsers } from "@/lib/actions/user.action";
 const page = async ({ searchParams }: any) => {
   const results = await getAllUsers({
     searchQuery: searchParams.search,
+    sort: searchParams.sort,
   });
 
   return (

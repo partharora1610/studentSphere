@@ -13,25 +13,9 @@ type FormNewUrlProps = {
 };
 
 export const formNewUrl = ({ key, value, params }: FormNewUrlProps) => {
-  // console.log("formNewUrl", { key, value, params });
   const currentUrl = qs.parse(params);
 
-  console.log("currentUrl", currentUrl);
-
   currentUrl[key] = value;
-  // console.log("currentUrl", currentUrl);
-  // console.log(
-  //   qs.stringifyUrl(
-  //     {
-  //       url: window.location.pathname,
-  //       query: currentUrl,
-  //     },
-  //     {
-  //       skipEmptyString: true,
-  //       skipNull: true,
-  //     }
-  //   )
-  // );
 
   return qs.stringifyUrl(
     {

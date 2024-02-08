@@ -41,6 +41,8 @@ const Page = async ({ params }: any) => {
     answers,
   } = results.data;
 
+  console.log(userId + " From the page.tsx file");
+
   return (
     <main>
       <QuestionPageHeader
@@ -54,7 +56,7 @@ const Page = async ({ params }: any) => {
         downvotes={downvotes}
       />
       <QuestionContent description={description} tags={tags} />
-      <AnswerContainer answers={answers} />
+      <AnswerContainer answers={JSON.stringify(answers)} user={userId} />
       <AnswerForm questionId={id} author={JSON.stringify(mongoUser._id)} />
     </main>
   );

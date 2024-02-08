@@ -1,3 +1,6 @@
+"use client";
+
+import { upvoteAnswer } from "@/lib/actions/answer.action";
 import Image from "next/image";
 import React from "react";
 
@@ -19,8 +22,20 @@ const AnswerCard = ({
   downvotes,
   createdAt,
   author,
+  id,
+  userId,
 }: any) => {
   const days = getDaysDifference(new Date(JSON.parse(createdAt)));
+  const answerId = id;
+
+  const upvoteHandler = async () => {
+    console.log("upvoting");
+    console.log(answerId);
+    console.log(userId);
+    const response = await upvoteAnswer({ answerId, userId });
+
+    console.log(response);
+  };
 
   return (
     <div>
@@ -34,6 +49,11 @@ const AnswerCard = ({
         <div className="flex gap-1">
           <p>{upvotes.length}</p>
           <p>{downvotes.length}</p>
+        </div>
+
+        <div>
+          <p onClick={upvoteHandler}>Upvote</p>
+          <p>Downvote</p>
         </div>
       </div>
       <div>

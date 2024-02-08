@@ -26,19 +26,18 @@ const Page = async ({ searchParams, params }: any) => {
       <div className="flex flex-col gap-6">
         {results?.questions.map((question: any, index: any) => {
           return (
-            <div key={index}>CARD</div>
-            // <QuestionCard
-            //   key={question._id}
-            //   _id={question._id}
-            //   title={question.title}
-            //   tags={question.tags}
-            //   author={question.author}
-            //   upvotes={question.upvotes}
-            //   views={question.views}
-            //   answers={question.answers}
-            //   createdAt={question.createdAt}
-            //   clerkId={question.clerkId}
-            // />
+            <QuestionCard
+              key={question._id}
+              _id={JSON.parse(JSON.stringify(question._id))}
+              title={question.title}
+              tags={JSON.parse(JSON.stringify(question.tags))}
+              author={JSON.parse(JSON.stringify(question.author))}
+              upvotes={question.upvotes}
+              downvotes={question.downvotes}
+              views={question.views}
+              answers={question.answers}
+              createdAt={question.createdAt}
+            />
           );
         })}
       </div>

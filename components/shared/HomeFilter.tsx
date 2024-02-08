@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { Button } from "../ui/button";
-// import { formNewUrl } from "@/lib/utils";
+import { formNewUrl } from "@/lib/utils";
 
 const FILTER = [
   {
@@ -30,46 +30,41 @@ const FILTER = [
   },
 ];
 
+// Here the backend logic is working fine but the router is not working !!
+
 const HomeFilter = () => {
   const searchParams = useSearchParams();
+
   const router = useRouter();
 
-  // const [active, setActive] = useState("");
+  const [active, setActive] = useState("");
 
   const handleClick = (item: string) => {
-    console.log(item);
-    router.push("/ask-question", { scroll: false });
-    // console.log(router);
+    if (active == item) {
+      setActive("");
 
-    // if (active == item) {
-    //   // setActive("");
+      const newURL = formNewUrl({
+        params: searchParams.toString(),
+        key: "filter",
+        value: null,
+      });
 
-    //   const newURL = formNewUrl({
-    //     params: searchParams.toString(),
-    //     key: "filter",
-    //     value: null,
-    //   });
-    //   console.log({ newURL });
+      router.push(newURL, { scroll: false });
+    } else {
+      setActive(item);
 
-    //   router.push(newURL, { scroll: false });
-    // } else {
-    //   // setActive(item);
+      const newURL = formNewUrl({
+        params: searchParams.toString(),
+        key: "filter",
+        value: item.toLowerCase(),
+      });
 
-    //   const newURL = formNewUrl({
-    //     params: searchParams.toString(),
-    //     key: "filter",
-    //     value: item.toLowerCase(),
-    //   });
-
-    //   console.log({ newURL });
-
-    //   router.push(newURL, { scroll: false });
-    // }
+      router.push(newURL, { scroll: false });
+    }
   };
 
   return (
     <div className="flex gap-4 mb-8">
-      {/* <p className="text-white">{active}</p> */}
       {FILTER.map((item, index) => {
         return (
           <Link

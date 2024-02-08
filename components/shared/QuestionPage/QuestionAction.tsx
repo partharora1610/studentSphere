@@ -1,6 +1,6 @@
 "use client";
 
-import { viewInteraction } from "@/lib/actions/interaction.action";
+// import { viewInteraction } from "@/lib/actions/interaction.action";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
@@ -11,10 +11,11 @@ const QuestionAction = (params: any) => {
   const { questionId, userId, views } = params;
 
   useEffect(() => {
-    viewInteraction({
-      questionId: questionId,
-      userId: userId,
-    });
+    // This is causing some error in the component....
+    // viewInteraction({
+    //   questionId: questionId,
+    //   userId: userId,
+    // });
   }, [questionId, userId, pathname, router]);
 
   return <div>{views} views</div>;
@@ -22,4 +23,4 @@ const QuestionAction = (params: any) => {
 
 export default QuestionAction;
 
-// currently single view is counted as 2 views since the component is rendering twice how can I fix this ??
+// currently single view is counted as 2 views since the component is rendering twice how can I fix this ???

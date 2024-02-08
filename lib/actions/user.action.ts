@@ -25,7 +25,9 @@ export async function getUserById(params: { userId: string }) {
 export const getAllUsers = async (params: any) => {
   try {
     connectToDatabase();
-    const { searchQuery } = params;
+    const { searchQuery, sort } = params;
+
+    console.log("SORT QUERY", sort);
 
     const query: FilterQuery<typeof User> = {};
 
@@ -36,7 +38,28 @@ export const getAllUsers = async (params: any) => {
       ];
     }
 
-    const users = await User.find(query);
+    let sortQuery = {};
+
+    switch (sort) {
+      case "new":
+        sortQuery = { createdAt: -1 };
+        break;
+      case "old":
+        sortQuery = { createdAt: 1 };
+        break;
+
+      case "top":
+        // most number of followers/badges
+        break;
+
+      default:
+        sortQuery = { createdAt: -1 };
+        break;
+    }
+
+    console.log("SORT QUERY", sortQuery);
+
+    const users = await User.find(query).sort(sortQuery);
 
     return { users };
   } catch (error) {

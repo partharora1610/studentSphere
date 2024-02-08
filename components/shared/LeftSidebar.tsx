@@ -29,11 +29,6 @@ const sidebarLinks: SidebarLink[] = [
     label: "Collections",
   },
   {
-    imgURL: "/assets/icons/suitcase.svg",
-    route: "/jobs",
-    label: "Find Jobs",
-  },
-  {
     imgURL: "/assets/icons/tag.svg",
     route: "/tags",
     label: "Tags",
@@ -52,7 +47,9 @@ const sidebarLinks: SidebarLink[] = [
 
 const LeftSidebar = (props: any) => {
   const pathname = usePathname();
-  const { userId } = props;
+  let { userId } = props;
+
+  userId = JSON.parse(userId);
 
   return (
     <section className="background-light900_dark200 light-border custom-scrollbar sticky left-0 top-0 flex h-screen flex-col justify-between overflow-y-auto border-r p-6 pt-36 shadow-light-300 dark:shadow-none max-sm:hidden lg:w-[266px]">

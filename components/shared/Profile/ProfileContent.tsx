@@ -61,7 +61,7 @@ const ProfileContent = async (params: any) => {
           </Button>
         </div>
 
-        <div className="text-white flex flex-col">
+        <div className="text-white flex flex-col gap-8">
           {questions?.data?.map((question: any) => {
             return (
               <QuestionCard

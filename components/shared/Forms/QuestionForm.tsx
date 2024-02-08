@@ -25,15 +25,14 @@ import { usePathname, useRouter } from "next/navigation";
 type QuestionFormProps = {
   mongoUserId: string;
   type: string;
-  questionDetails?: string;
+  questionDetails?: any; // ?? work here
 };
 
-export function QuestionForm(props: any) {
+export function QuestionForm(props: QuestionFormProps) {
   const { mongoUserId, type, questionDetails } = props;
 
   const parsedQuestionDetails = JSON.parse(questionDetails);
 
-  // use this
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -169,7 +168,6 @@ export function QuestionForm(props: any) {
                     }
                   />
 
-                  {/* Show tags here in case of the edit */}
                   {field.value.length > 0 && (
                     <div className="flex-start mt-2.5 gap-2.5">
                       {field.value.map((tag: any) => (

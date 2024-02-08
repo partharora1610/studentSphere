@@ -2,9 +2,10 @@ import React from "react";
 import AnswerCard from "../Cards/AnswerCard";
 
 const AnswerContainer = (params: any) => {
-  const { answers } = params;
+  let { answers, userId } = params;
 
-  // console.log("answers", answers);
+  answers = JSON.parse(answers);
+
   const totalAnswers = answers.length;
 
   return (
@@ -15,10 +16,12 @@ const AnswerContainer = (params: any) => {
       </div>
 
       <div className="flex flex-col gap-10">
-        {answers.map((answer: any) => {
+        {answers?.map((answer: any) => {
           return (
             <AnswerCard
               key={answer._id}
+              userId={userId}
+              id={answer._id}
               content={answer.content}
               author={answer.author}
               upvotes={answer.upvotes}

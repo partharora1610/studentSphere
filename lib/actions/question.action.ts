@@ -51,7 +51,7 @@ export const getAllQuestion = async (params: any) => {
   try {
     connectToDatabase();
 
-    const { searchQuery, page = 1, pageSize = 4 } = params;
+    const { searchQuery, page = 1, pageSize = 4, filter } = params;
 
     const skipAmount = (page - 1) * pageSize;
 
@@ -64,6 +64,29 @@ export const getAllQuestion = async (params: any) => {
       ];
     }
 
+    let sortQuery = {};
+
+    switch (filter) {
+      case "newest":
+        sortQuery = { createdAt: -1 };
+        break;
+
+      case "frequent":
+        sortQuery = { views: -1 };
+        break;
+
+      case "unanswered":
+        query.answers = { $size: 0 };
+        break;
+
+      case "recommended":
+        // Implement a recommendation system
+        break;
+
+      default:
+        break;
+    }
+
     const questions = await Question.find(query)
       .populate({
         path: "tags",
@@ -73,6 +96,7 @@ export const getAllQuestion = async (params: any) => {
         path: "author",
         model: User,
       })
+      .sort(sortQuery)
       .skip(skipAmount)
       .limit(pageSize);
 
@@ -255,7 +279,6 @@ export const getHotQuestions = async () => {
 export const getSavedQuestions = async (params: any) => {
   try {
     connectToDatabase();
-    // This is the clerkId
     const { userId } = params;
 
     const user = await User.findOne({ clerkId: userId }).populate({
@@ -289,7 +312,12 @@ export const saveQuestion = async (params: any) => {
       { new: true }
     );
 
+    if (!user) {
+      return { data: "Invalid request from the client..." };
+    }
+
     revalidatePath(`/collection`);
+
     return { data: null };
   } catch (error) {
     console.log("ERROR IN SAVE QUESTION ACTION");

@@ -16,6 +16,7 @@ import {
   deleteQuestion,
   downvoteQuestion,
   saveQuestion,
+  unsaveQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
 import { SignedIn } from "@clerk/nextjs";
@@ -52,6 +53,7 @@ const QuestionCard = ({
   views,
   createdAt,
   clerkId,
+  saved,
 }: any) => {
   const upvoteHandler = async () => {
     await upvoteQuestion({ questionId: _id, userId: clerkId });
@@ -68,7 +70,9 @@ const QuestionCard = ({
     await saveQuestion({ questionId: _id, userId: clerkId });
   };
 
-  const unsaveHandler = async () => {};
+  const unsaveHandler = async () => {
+    await unsaveQuestion({ questionId: _id, userId: clerkId });
+  };
 
   const deleteQuestionHandler = async () => {
     await deleteQuestion({ questionId: _id });
@@ -117,7 +121,12 @@ const QuestionCard = ({
           <Button onClick={downvoteHandler}>{downvotes.length} down</Button>
         </div>
       </CardFooter>
-      <Button onClick={saveHandler}>Save</Button>
+
+      {!saved ? (
+        <Button onClick={saveHandler}>Save</Button>
+      ) : (
+        <Button onClick={unsaveHandler}>Unsave</Button>
+      )}
     </Card>
   );
 };

@@ -33,6 +33,7 @@ const Page = async () => {
             answers={question.answers}
             createdAt={question.createdAt}
             clerkId={JSON.parse(JSON.stringify(userId))}
+            saved={true}
           />
         ))}
       </div>

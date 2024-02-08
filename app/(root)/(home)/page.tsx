@@ -10,6 +10,7 @@ const Home = async ({ searchParams }: any) => {
   const result = await getAllQuestion({
     searchQuery: searchParams.search,
     page: searchParams.page ? +searchParams.page : 1,
+    filter: searchParams.filter,
   });
 
   return (
