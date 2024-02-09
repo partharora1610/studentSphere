@@ -5,7 +5,10 @@ import { createUser } from "@/lib/actions/user.action";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
+  console.log("Checkpoint1");
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
+  console.log("Checkpoint2");
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
@@ -13,11 +16,15 @@ export async function POST(req: Request) {
     );
   }
 
+  console.log("Checkpoint3");
+
   // Get the headers
   const headerPayload = headers();
   const svix_id = headerPayload.get("svix-id");
   const svix_timestamp = headerPayload.get("svix-timestamp");
   const svix_signature = headerPayload.get("svix-signature");
+
+  console.log("Checkpoint4");
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
@@ -26,6 +33,8 @@ export async function POST(req: Request) {
     });
   }
 
+  console.log("Checkpoint5");
+
   // Get the body
   const payload = await req.json();
   const body = JSON.stringify(payload);
@@ -33,6 +42,8 @@ export async function POST(req: Request) {
   const wh = new Webhook(WEBHOOK_SECRET);
 
   let evt: WebhookEvent;
+
+  console.log("Checkpoint6");
 
   try {
     evt = wh.verify(body, {
@@ -46,6 +57,7 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
+  console.log("Checkpoint7");
 
   const { id } = evt.data;
   const eventType = evt.type;
@@ -53,7 +65,11 @@ export async function POST(req: Request) {
   console.log({ id, eventType });
   console.log({ data: evt.data });
 
+  console.log("Checkpoint8");
+
   if (eventType === "user.created") {
+    console.log("Checkpoint8");
+
     const { id, email_addresses, image_url, username, first_name, last_name } =
       evt.data;
 
