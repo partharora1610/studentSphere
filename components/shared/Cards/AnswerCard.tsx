@@ -3,12 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import React from "react";
 
 function getDaysDifference(targetDate: Date): number {
-  const { id } = useParams();
-
   const currentDate = new Date();
 
   const timeDifference = targetDate.getTime() - currentDate.getTime();
