@@ -22,5 +22,3 @@ const QuestionAction = (params: any) => {
 };
 
 export default QuestionAction;
-
-// currently single view is counted as 2 views since the component is rendering twice how can I fix this ???

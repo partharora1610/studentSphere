@@ -79,12 +79,14 @@ export function QuestionForm(props: QuestionFormProps) {
   const onSubmit = async (values: z.infer<typeof QuestionFormSchema>) => {
     setIsSubmitting(true);
 
+    console.log(mongoUserId);
+
     try {
       await createQuestion({
         title: values.title,
         description: values.description,
         tags: values.tags,
-        author: mongoUserId,
+        author: JSON.parse(mongoUserId),
         path: pathname,
       });
 

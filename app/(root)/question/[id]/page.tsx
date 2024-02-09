@@ -55,6 +55,7 @@ const Page = async ({ params }: any) => {
         views={views}
         upvotes={upvotes}
         downvotes={downvotes}
+        mongoUser={mongoUser}
       />
       <QuestionContent description={description} tags={tags} />
       <AnswerContainer answers={JSON.stringify(answers)} userId={userId} />

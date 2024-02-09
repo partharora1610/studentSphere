@@ -158,10 +158,16 @@ export const getQuestionOfUser = async (params: any) => {
 
     const { _id } = params;
 
-    const questions = await Question.find({ author: _id }).populate({
-      path: "tags",
-      model: Tag,
-    });
+    const questions = await Question.find({ author: _id }).populate([
+      {
+        path: "tags",
+        model: Tag,
+      },
+      {
+        path: "author",
+        model: User,
+      },
+    ]);
 
     return { data: questions };
   } catch (error) {
@@ -198,17 +204,16 @@ export const upvoteQuestion = async (params: any) => {
       return { data: null };
     }
 
-    // updating the reputation
-
-    // User
+    // UPDATING REPUTATION
     await User.findByIdAndUpdate(mongo_user._id, {
       $inc: { reputation: hasUpvoted ? -1 : 1 },
     });
 
-    // Author
-    await User.findByIdAndUpdate(mongo_question.author, {
-      $inc: { reputation: hasUpvoted ? -10 : 10 },
-    });
+    if (mongo_question.author.toString() != mongo_user._id.toString()) {
+      await User.findByIdAndUpdate(mongo_question.author, {
+        $inc: { reputation: hasUpvoted ? -10 : 10 },
+      });
+    }
 
     revalidatePath(`/`);
     return { data: question };
@@ -242,15 +247,16 @@ export const downvoteQuestion = async (params: any) => {
       { new: true }
     );
 
-    // User
+    // UPDATING REPUTATION
     await User.findByIdAndUpdate(mongo_user._id, {
       $inc: { reputation: hasDownUpvoted ? -1 : 1 },
     });
 
-    // Author
-    await User.findByIdAndUpdate(mongo_question.author, {
-      $inc: { reputation: hasDownUpvoted ? -10 : 10 },
-    });
+    if (mongo_question.author.toString() != mongo_user._id.toString()) {
+      await User.findByIdAndUpdate(mongo_question.author, {
+        $inc: { reputation: hasDownUpvoted ? -10 : 10 },
+      });
+    }
 
     revalidatePath(`/`);
     return { data: question };
@@ -343,22 +349,26 @@ export const saveQuestion = async (params: any) => {
     connectToDatabase();
     const { questionId, userId } = params;
 
-    console.log(questionId, userId);
-
     const user = await User.findOneAndUpdate(
       { clerkId: userId },
       {
-        $push: { saved: questionId },
+        $addToSet: { saved: questionId },
       },
       { new: true }
     );
+
+    const question = await Question.findById(questionId);
 
     if (!user) {
       return { data: "Invalid request from the client..." };
     }
 
-    revalidatePath(`/collection`);
+    // UPDATING REPUTATION OF THE AUTHOR OF THE POST
+    await User.findByIdAndUpdate(question.author, {
+      $inc: { reputation: 5 },
+    });
 
+    revalidatePath(`/`);
     return { data: null };
   } catch (error) {
     console.log("ERROR IN SAVE QUESTION ACTION");
@@ -386,7 +396,7 @@ export const unsaveQuestion = async (params: any) => {
       { new: true }
     );
 
-    revalidatePath(`/collection`);
+    revalidatePath(`/`);
     return { data: null };
   } catch (error) {
     console.log("ERROR IN SAVE QUESTION ACTION");

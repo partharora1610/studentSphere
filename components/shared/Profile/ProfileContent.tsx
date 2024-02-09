@@ -1,11 +1,8 @@
 // "use client";
 
 import { Button } from "@/components/ui/button";
-// import React, { useEffect, useState } from "react";
 import QuestionCard from "../Cards/QuestionCard";
-import { getQuestionOfUser } from "@/lib/actions/question.action";
 import { auth } from "@clerk/nextjs";
-import { getUserById } from "@/lib/actions/user.action";
 
 const CONSTANTS = [
   {
@@ -23,15 +20,11 @@ const CONSTANTS = [
 const ProfileContent = async (params: any) => {
   const { userId } = auth();
 
+  const { mongo_user, questions } = params;
+
   if (!userId) {
     return <p>Not authorized</p>;
   }
-  const mongo_user = await getUserById({ userId: userId });
-  // Need to refactor this and change teh function by using the clerkId
-
-  const questions = await getQuestionOfUser({ _id: mongo_user._id });
-
-  console.log({ questions });
 
   return (
     <div className="grid grid-cols-3 gap-2">
@@ -69,7 +62,7 @@ const ProfileContent = async (params: any) => {
                 _id={JSON.parse(JSON.stringify(question._id))}
                 title={question.title}
                 tags={JSON.parse(JSON.stringify(question.tags))}
-                author={JSON.parse(JSON.stringify(question.author))}
+                author={JSON.stringify(question.author)}
                 upvotes={question.upvotes}
                 downvotes={question.downvotes}
                 views={question.views}
@@ -82,10 +75,10 @@ const ProfileContent = async (params: any) => {
         </div>
       </div>
 
-      <div className="text-dark100_light900 ">
-        <h3 className="base-bold mb-4">TOP TAGS</h3>
-        <div>Need to render tags</div>
-      </div>
+      {/* <div className="text-dark100_light900 "> */}
+      {/* <h3 className="base-bold mb-4">TOP TAGS</h3> */}
+      {/* <div></div> */}
+      {/* </div> */}
     </div>
   );
 };

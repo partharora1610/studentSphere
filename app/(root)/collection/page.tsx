@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/shared/Cards/QuestionCard";
 import LocalSearch from "@/components/shared/Search/LocalSearch";
 import { getSavedQuestions } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.action";
 import { auth } from "@clerk/nextjs";
 import React from "react";
 
@@ -12,6 +13,9 @@ const Page = async () => {
   }
 
   const results = await getSavedQuestions({ userId });
+
+  // instead popultae the previous method with the user data
+  const user = await getUserById({ userId });
 
   return (
     <div className="dark:text-white">
@@ -26,7 +30,7 @@ const Page = async () => {
             _id={JSON.parse(JSON.stringify(question._id))}
             title={question.title}
             tags={JSON.parse(JSON.stringify(question.tags))}
-            author={JSON.parse(JSON.stringify(question.author))}
+            author={JSON.stringify(user)}
             upvotes={question.upvotes}
             downvotes={question.downvotes}
             views={question.views}

@@ -21,7 +21,7 @@ const RightSidebar = async () => {
               <>
                 <Link
                   key={question._id}
-                  href="/question"
+                  href={`/question/${question._id}`}
                   className="flex justify-between items-start gap-7"
                 >
                   <p className="text-dark200_light900 body-regular">

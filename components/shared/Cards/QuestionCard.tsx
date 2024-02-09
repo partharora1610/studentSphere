@@ -19,8 +19,11 @@ import {
   unsaveQuestion,
   upvoteQuestion,
 } from "@/lib/actions/question.action";
-import { SignedIn } from "@clerk/nextjs";
+import { SignedIn, auth } from "@clerk/nextjs";
 import RenderTag from "../RenderTag";
+import { getFormattedDate } from "@/utils";
+import { Calendar } from "lucide-react";
+import SavedButton from "./SavedButton";
 
 interface QuestionProps {
   _id: string;
@@ -59,6 +62,8 @@ const QuestionCard = ({
     await upvoteQuestion({ questionId: _id, userId: clerkId });
   };
 
+  console.log(createdAt.toDateString());
+
   const downvoteHandler = async () => {
     await downvoteQuestion({
       questionId: _id,
@@ -78,7 +83,10 @@ const QuestionCard = ({
     await deleteQuestion({ questionId: _id });
   };
 
-  const showActionButtons = clerkId && clerkId === author.clerkId;
+  author = JSON.parse(author);
+  console.log(author);
+
+  const showActionButtons = clerkId && clerkId === author?.clerkId;
 
   return (
     <Card className="background-light900_dark200 border-none text-dark100_light900 px-4">
@@ -110,10 +118,26 @@ const QuestionCard = ({
       </CardHeader>
 
       <CardFooter className="flex items-center justify-between">
-        <div className="flex gap-2">
-          <Image src={""} alt="user" />
+        <div className="flex gap-2 items-center">
+          <Image
+            src={`${author.image}`}
+            width={20}
+            height={20}
+            className="rounded-full"
+            alt="user"
+          />
           <p>{author.name}</p>
-          <p>timestamp</p>
+          <div className="w-[4px] h-[4px] bg-slate-500 dark:bg-slate-50 rounded-full"></div>
+          <div className="flex gap-2">
+            <Calendar
+              width={20}
+              height={20}
+              className="text-slate-400 dark:bg-slate-50"
+            />
+            <p className="text-slate-400 dark:bg-slate-50">
+              {getFormattedDate(createdAt)}
+            </p>
+          </div>
         </div>
         <div className="flex gap-1 small-regular">
           <Button>{views} views</Button>
@@ -122,11 +146,13 @@ const QuestionCard = ({
         </div>
       </CardFooter>
 
-      {!saved ? (
+      <SavedButton saved={saved} userId={clerkId} questionId={_id} />
+
+      {/* {!saved ? (
         <Button onClick={saveHandler}>Save</Button>
       ) : (
         <Button onClick={unsaveHandler}>Unsave</Button>
-      )}
+      )} */}
     </Card>
   );
 };
