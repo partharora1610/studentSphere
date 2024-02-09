@@ -37,13 +37,27 @@ const AnswerForm = (params: any) => {
       content: values.content,
       author: JSON.parse(author),
     });
+
+    // reset the form
+    form.reset();
+  };
+
+  const generateAIResponse = () => {
+    console.log("Generate AI response");
   };
 
   return (
     <>
       <div className="flex justify-between items-center mb-4 text-dark100_light900 ">
         <p className="base-semibold">Write your answer here</p>
-        <Button>Generate AI answer</Button>
+        <Button
+          className="bg-primary-500"
+          onClick={() => {
+            generateAIResponse();
+          }}
+        >
+          Generate AI answer
+        </Button>
       </div>
       <div>
         <Form {...form}>
@@ -53,9 +67,7 @@ const AnswerForm = (params: any) => {
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    {/* <p className="base-medium">Detailed Answer</p> */}
-                  </FormLabel>
+                  <FormLabel></FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Enter description here"

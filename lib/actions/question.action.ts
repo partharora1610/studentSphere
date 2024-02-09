@@ -39,6 +39,17 @@ export const createQuestion = async (params: createQuestionParams) => {
       $push: { tags: { $each: tagDocuments } },
     });
 
+    await Interaction.create({
+      user: author,
+      action: "ask_question",
+      question: newQuestion._id,
+      tags: tagDocuments,
+    });
+
+    await User.findByIdAndUpdate(author, {
+      $inc: { reputation: 5 },
+    });
+
     revalidatePath(path);
     return { data: newQuestion };
   } catch (error) {
@@ -172,6 +183,8 @@ export const upvoteQuestion = async (params: any) => {
       return { data: null };
     }
 
+    const hasUpvoted = mongo_question.upvotes.includes(mongo_user._id);
+
     const question = await Question.findByIdAndUpdate(
       mongo_question._id,
       {
@@ -180,6 +193,22 @@ export const upvoteQuestion = async (params: any) => {
       },
       { new: true }
     );
+
+    if (!question) {
+      return { data: null };
+    }
+
+    // updating the reputation
+
+    // User
+    await User.findByIdAndUpdate(mongo_user._id, {
+      $inc: { reputation: hasUpvoted ? -1 : 1 },
+    });
+
+    // Author
+    await User.findByIdAndUpdate(mongo_question.author, {
+      $inc: { reputation: hasUpvoted ? -10 : 10 },
+    });
 
     revalidatePath(`/`);
     return { data: question };
@@ -236,7 +265,7 @@ export async function editQuestion(params: any) {
 
     await question.save();
 
-    revalidatePath(path);
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
   }
@@ -256,7 +285,7 @@ export async function deleteQuestion(params: any) {
       { $pull: { questions: questionId } }
     );
 
-    revalidatePath(path);
+    revalidatePath("/");
   } catch (error) {
     console.log(error);
   }

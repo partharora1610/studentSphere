@@ -11,7 +11,10 @@ import { getUserById } from "@/lib/actions/user.action";
 
 const Page = async ({ params }: any) => {
   const { userId } = auth();
-  // console.log(userId);
+
+  if (!userId) {
+    return <div>Not signed in</div>;
+  }
 
   let mongoUser;
 
@@ -56,7 +59,7 @@ const Page = async ({ params }: any) => {
         downvotes={downvotes}
       />
       <QuestionContent description={description} tags={tags} />
-      <AnswerContainer answers={JSON.stringify(answers)} user={userId} />
+      <AnswerContainer answers={JSON.stringify(answers)} userId={userId} />
       <AnswerForm questionId={id} author={JSON.stringify(mongoUser._id)} />
     </main>
   );

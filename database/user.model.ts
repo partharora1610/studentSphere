@@ -12,7 +12,7 @@ export interface IUser extends mongoose.Document {
   location?: string;
 
   portfolioUrl: string;
-  reputaion: number;
+  reputation: number;
   saved: Schema.Types.ObjectId[];
 
   joinedAt: Date;
@@ -30,7 +30,7 @@ const userSchema = new Schema<IUser>({
   location: { type: String },
 
   portfolioUrl: { type: String },
-  reputaion: { type: Number, default: 0 },
+  reputation: { type: Number, default: 0 },
   saved: [{ type: Schema.Types.ObjectId, ref: "Question" }],
 
   joinedAt: { type: Date, default: Date.now },
