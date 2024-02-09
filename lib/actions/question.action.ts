@@ -231,6 +231,8 @@ export const downvoteQuestion = async (params: any) => {
       return { data: null };
     }
 
+    const hasDownUpvoted = mongo_question.downvotes.includes(mongo_user._id);
+
     const question = await Question.findByIdAndUpdate(
       questionId,
       {
@@ -239,6 +241,16 @@ export const downvoteQuestion = async (params: any) => {
       },
       { new: true }
     );
+
+    // User
+    await User.findByIdAndUpdate(mongo_user._id, {
+      $inc: { reputation: hasDownUpvoted ? -1 : 1 },
+    });
+
+    // Author
+    await User.findByIdAndUpdate(mongo_question.author, {
+      $inc: { reputation: hasDownUpvoted ? -10 : 10 },
+    });
 
     revalidatePath(`/`);
     return { data: question };

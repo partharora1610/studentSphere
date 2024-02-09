@@ -5,6 +5,7 @@ import { connectToDatabase } from "../mongoose";
 import Question from "@/database/question.model";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
+import Interaction from "@/database/interaction.model";
 
 export async function createAnswer(params: any) {
   try {
@@ -16,6 +17,20 @@ export async function createAnswer(params: any) {
 
     const questionObject = await Question.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
+    });
+
+    // Adding interaction
+    await Interaction.create({
+      user: author,
+      action: "answer",
+      question: question,
+      answer: newAnswer._id,
+      tags: questionObject.tags,
+    });
+
+    // Incrementing reputation
+    await User.findByIdAndUpdate(author, {
+      $inc: { reputation: 10 },
     });
 
     revalidatePath(`/questions/${question}`);
@@ -63,6 +78,8 @@ export async function upvoteAnswer(params: any) {
       return { data: null };
     }
 
+    const hasUpvoted = mongo_answer.upvotes.includes(mongo_user._id);
+
     const answer = await Answer.findByIdAndUpdate(
       mongo_answer._id,
       {
@@ -71,6 +88,16 @@ export async function upvoteAnswer(params: any) {
       },
       { new: true }
     );
+
+    // User
+    await User.findByIdAndUpdate(mongo_user._id, {
+      $inc: { reputation: hasUpvoted ? -1 : 1 },
+    });
+
+    // Author
+    await User.findByIdAndUpdate(mongo_answer.author, {
+      $inc: { reputation: hasUpvoted ? -10 : 10 },
+    });
 
     revalidatePath(`/questions/${questionId}`);
     return { data: answer };
@@ -93,6 +120,8 @@ export async function downvoteAnswer(params: any) {
       return { data: null };
     }
 
+    const hasDownUpvoted = mongo_answer.downvotes.includes(mongo_user._id);
+
     const answer = await Answer.findByIdAndUpdate(
       mongo_answer._id,
       {
@@ -101,6 +130,15 @@ export async function downvoteAnswer(params: any) {
       },
       { new: true }
     );
+
+    await User.findByIdAndUpdate(mongo_user._id, {
+      $inc: { reputation: hasDownUpvoted ? -1 : 1 },
+    });
+
+    // Author
+    await User.findByIdAndUpdate(mongo_answer.author, {
+      $inc: { reputation: hasDownUpvoted ? -10 : 10 },
+    });
 
     revalidatePath(`/questions/${questionId}`);
     return { data: answer };

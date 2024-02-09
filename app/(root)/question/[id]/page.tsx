@@ -44,8 +44,6 @@ const Page = async ({ params }: any) => {
     answers,
   } = results.data;
 
-  console.log(userId + " From the page.tsx file");
-
   return (
     <main>
       <QuestionPageHeader
